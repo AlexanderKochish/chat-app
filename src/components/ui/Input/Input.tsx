@@ -14,30 +14,40 @@ const Input = <T extends FieldValues>({
   control,
   icon = false,
 }: MyInputProps<T>) => {
-  const { field, fieldState } = useController({ control, name });
+  const {
+    field,
+    fieldState: { error },
+    formState: { errors, isSubmitted },
+  } = useController({ control, name });
   const [show, setShow] = useState(false);
 
   const changeInputType = show ? "text" : "password";
 
   return (
-    <div className={s.inputWrapper}>
-      <input
-        {...field}
-        className={s.input}
-        id={name}
-        type={!icon ? "text" : changeInputType}
-      />
-      {icon && (
-        <button
-          type="button"
-          onClick={() => setShow((prev) => !prev)}
-          className={s.btn}
-        >
-          {show ? <OpenEyeIcon /> : <CloseEyeIcon />}
-        </button>
+    <>
+      <div className={s.inputWrapper}>
+        <input
+          {...field}
+          className={s.input}
+          id={name}
+          type={!icon ? "text" : changeInputType}
+        />
+        {icon && (
+          <button
+            type="button"
+            onClick={() => setShow((prev) => !prev)}
+            className={s.btn}
+          >
+            {show ? <OpenEyeIcon /> : <CloseEyeIcon />}
+          </button>
+        )}
+      </div>
+      {errors && isSubmitted && (
+        <label className={s.error} htmlFor={name}>
+          {error?.message}
+        </label>
       )}
-      <label htmlFor={name}>{fieldState.error?.message}</label>
-    </div>
+    </>
   );
 };
 

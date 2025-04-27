@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import s from "./SignIn.module.css";
 import { ChatLogo } from "../../../assets/icons";
 import Input from "../../../components/ui/Input/Input";
@@ -8,17 +8,38 @@ import {
   signInSchema,
   SignInSchemaType,
 } from "../../../lib/schemas/auth.schema";
+import { useMutation } from "@tanstack/react-query";
+import { signIn } from "../../../api/api";
+import toast from "react-hot-toast";
 
 const SignIn = () => {
-  const { handleSubmit, control } = useForm<SignInSchemaType>({
+  const navigate = useNavigate();
+  const { handleSubmit, control, reset } = useForm<SignInSchemaType>({
     defaultValues: {
       email: "",
       password: "",
     },
-    mode: "onChange",
+    mode: "onSubmit",
+    reValidateMode: "onSubmit",
     resolver: zodResolver(signInSchema),
   });
-  const onSubmit = (data: SignInSchemaType) => console.log(data);
+  const { mutate } = useMutation({
+    mutationFn: (data: SignInSchemaType) => onSubmit(data),
+  });
+  const onSubmit = async (data: SignInSchemaType) => {
+    try {
+      const response = await signIn(data);
+      if (response?.status === 201) {
+        toast.success("Logged is successful");
+      }
+      reset();
+      navigate("/", { replace: true });
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new Error("Something went wrong");
+      }
+    }
+  };
   return (
     <section className={s.signUp}>
       <div className={s.signUpWrapper}>
@@ -26,7 +47,10 @@ const SignIn = () => {
           <ChatLogo width="35" height="35" />
           <h1>Chatter</h1>
         </div>
-        <form className={s.form} onSubmit={handleSubmit(onSubmit)}>
+        <form
+          className={s.form}
+          onSubmit={handleSubmit((data) => mutate(data))}
+        >
           <Input control={control} name="email" />
           <Input control={control} name="password" icon />
           <button className={s.btn} type="submit">

@@ -5,3 +5,9 @@ export const messageSchema = z.object({
 });
 
 export type MessageSchemaType = z.infer<typeof messageSchema>;
+
+export const searchSchema = z.object({
+  search: z.string().trim(),
+});
+
+export type SearchShemaType = z.infer<typeof searchSchema>;

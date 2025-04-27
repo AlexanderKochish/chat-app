@@ -43,9 +43,9 @@ export const signIn = async (data: SignInSchemaType) => {
 };
 
 // profile endpoints
-export const getProfile = async (id: string) => {
+export const getMe = async () => {
   try {
-    return await api.get(`${PROFILE_PARAMS}/${id}`, { withCredentials: true });
+    return await api.get(`${PROFILE_PARAMS}/me`, { withCredentials: true });
   } catch (error) {
     await handlerError(error);
   }

@@ -1,35 +1,68 @@
 import { useForm } from "react-hook-form";
 import { ChatLogo } from "../../../assets/icons";
 import s from "./SignUp.module.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Input from "../../../components/ui/Input/Input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   signUpSchema,
   SignUpSchemaType,
 } from "../../../lib/schemas/auth.schema";
+import { useMutation } from "@tanstack/react-query";
+import { signUp } from "../../../api/api";
+import toast from "react-hot-toast";
+import Spinner from "../../../components/ui/Spinner/Spinner";
 
 const SignUp = () => {
-  const { handleSubmit, control } = useForm<SignUpSchemaType>({
+  const navigate = useNavigate();
+  const { handleSubmit, control, reset } = useForm<SignUpSchemaType>({
     defaultValues: {
       email: "",
       name: "",
       password: "",
       confirmPassword: "",
     },
-    mode: "onChange",
+    mode: "onSubmit",
+    reValidateMode: "onSubmit",
     resolver: zodResolver(signUpSchema),
   });
-  const onSubmit = (data: SignUpSchemaType) => console.log(data);
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: (data: SignUpSchemaType) => onSubmit(data),
+  });
+
+  const onSubmit = async (data: SignUpSchemaType) => {
+    try {
+      const response = await signUp(data);
+
+      if (response?.status === 201) {
+        toast.success("Registration is Success");
+      }
+      reset();
+      navigate("/", { replace: true });
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error("Something went wrong");
+        throw new Error("Something went wrong");
+      }
+    }
+  };
+
+  if (isPending) {
+    return <Spinner />;
+  }
+
   return (
     <section className={s.signUp}>
       <div className={s.signUpWrapper}>
         <div className={s.top}>
-          <ChatLogo />
+          <ChatLogo height="35" width="35" />
           <h1>Chatter</h1>
         </div>
-
-        <form className={s.form} onSubmit={handleSubmit(onSubmit)}>
+        <form
+          className={s.form}
+          onSubmit={handleSubmit((data) => mutate(data))}
+        >
           <Input control={control} name="name" />
           <Input control={control} name="email" />
           <Input control={control} name="password" icon />

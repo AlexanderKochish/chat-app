@@ -1,42 +1,50 @@
-import { useForm } from "react-hook-form";
 import {
   ChatLogo,
   GlassIcon,
   HamburgerMenuIcon,
-  PaperPlaneIcon,
   PersonIcon,
 } from "../../assets/icons";
 import UserCard from "../../components/ui/UserCard/UserCard";
 import s from "./Chat.module.css";
+import DropdownMenuCustom from "../../components/ui/DropdownMenu/DropdownMenu";
+import DialogModal from "../../components/ui/Modal/Modal";
+import Input from "../../components/ui/Input/Input";
+import ChatForm from "../../components/ChatForm/ChatForm";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  messageSchema,
-  MessageSchemaType,
-} from "../../lib/schemas/chat.schema";
-import { useRef, useState } from "react";
-import { useAutosizeTextarea } from "../../hooks/useAutosizeTextarea";
+import { searchSchema, SearchShemaType } from "../../lib/schemas/chat.schema";
+import { useQuery } from "@tanstack/react-query";
+import { getMe } from "../../api/api";
+import { useNavigate } from "react-router-dom";
 
 const Chat = () => {
-  const textAreaRef = useRef<HTMLTextAreaElement>(null);
-  const [message, setMessage] = useState<
-    Array<{ id: number; senderId: string; message: string }>
-  >([]);
-  const { register, handleSubmit, watch, reset } = useForm<MessageSchemaType>({
-    defaultValues: {
-      chatMessage: "",
-    },
-    resolver: zodResolver(messageSchema),
+  const navigate = useNavigate();
+  const { isError } = useQuery({
+    queryKey: ["profile"],
+    queryFn: getMe,
   });
-  const chatMessage = watch("chatMessage");
-  useAutosizeTextarea(textAreaRef, chatMessage);
+  const { control, handleSubmit } = useForm<SearchShemaType>({
+    defaultValues: {
+      search: "",
+    },
 
-  const onSubmit = (data: MessageSchemaType) => {
-    setMessage((prev) => [
-      ...prev,
-      { id: Date.now(), senderId: "miu", message: data.chatMessage },
-    ]);
-    reset();
+    resolver: zodResolver(searchSchema),
+  });
+
+  const onSubmit = async (data: SearchShemaType) => {
+    try {
+      console.log(data);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new Error("Something went wrong");
+      }
+    }
   };
+
+  if (isError) {
+    navigate("/sign-in", { replace: true });
+  }
+
   return (
     <section>
       <div className="container">
@@ -52,12 +60,28 @@ const Chat = () => {
                 <span>User</span>
               </div>
               <div className={s.chatNav}>
-                <button className={s.btnWrapper}>
-                  <GlassIcon width="25" height="25" />
-                </button>
-                <button className={s.btnWrapper}>
-                  <HamburgerMenuIcon width="25" height="25" />
-                </button>
+                <DialogModal
+                  trigger={
+                    <button className={s.btnWrapper}>
+                      <GlassIcon width="25" height="25" />
+                    </button>
+                  }
+                >
+                  <form onSubmit={handleSubmit(onSubmit)}>
+                    <Input control={control} name="search" />
+                  </form>
+                </DialogModal>
+                <DropdownMenuCustom
+                  trigger={
+                    <button className={s.btnWrapper}>
+                      <HamburgerMenuIcon
+                        width="25"
+                        height="25"
+                        aria-label="Customise options"
+                      />
+                    </button>
+                  }
+                />
               </div>
             </div>
           </div>
@@ -71,7 +95,7 @@ const Chat = () => {
             </div>
             <div className={s.roomContent}>
               <div className={s.chatMessagge}>
-                {message.map((item) => (
+                {[{ id: 1, senderId: "miu", message: "" }].map((item) => (
                   <div
                     key={item?.id}
                     className={
@@ -84,20 +108,7 @@ const Chat = () => {
                   </div>
                 ))}
               </div>
-              <form className={s.formMessage} onSubmit={handleSubmit(onSubmit)}>
-                <textarea
-                  className={s.textArea}
-                  {...register("chatMessage")}
-                  ref={(e) => {
-                    register("chatMessage").ref(e);
-                    textAreaRef.current = e;
-                  }}
-                  name="chatMessage"
-                ></textarea>
-                <button className={s.sendBtn}>
-                  <PaperPlaneIcon width="25" height="25" />
-                </button>
-              </form>
+              <ChatForm />
             </div>
           </div>
         </div>
