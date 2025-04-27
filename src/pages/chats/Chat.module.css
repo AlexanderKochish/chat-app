@@ -124,6 +124,7 @@
 .message {
   display: flex;
   margin: 5px 0;
+  flex: 1;
   justify-content: flex-start;
 
   & > span {
