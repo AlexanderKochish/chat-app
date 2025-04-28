@@ -12,13 +12,13 @@ const DialogModal = ({ trigger, children }: Props) => (
   <Dialog.Root>
     <Dialog.Trigger asChild>{trigger}</Dialog.Trigger>
     <Dialog.Portal>
-      <Dialog.Overlay className={s.Overlay} />
-      <Dialog.Content className={s.Content}>
-        <Dialog.Title className={s.Title}>Search</Dialog.Title>
-        <Dialog.Description className={s.Description}></Dialog.Description>
+      <Dialog.Overlay className={s.overlay} />
+      <Dialog.Content className={s.content}>
+        <Dialog.Title className={s.title}>Search</Dialog.Title>
+        <Dialog.Description className={s.description}></Dialog.Description>
         {children}
         <Dialog.Close asChild>
-          <button className={s.IconButton} aria-label="Close">
+          <button className={s.iconButton} aria-label="Close">
             <CloseIcon />
           </button>
         </Dialog.Close>

@@ -8,7 +8,7 @@ import {
   SIGN_UP_PARAMS,
   USERS_PARAMS,
 } from "./constants";
-import { CreateNewChat, UpdateProfile } from "./types";
+import { UpdateProfile } from "./types";
 
 const api = axios.create({
   baseURL: BASE_API_URL,
@@ -62,7 +62,7 @@ export const updateProfile = async (id: string, data: UpdateProfile) => {
   }
 };
 
-// users endpoint
+// users endpoints
 export const searchUserByName = async (search: string) => {
   try {
     return await api.get(USERS_PARAMS, {
@@ -76,7 +76,10 @@ export const searchUserByName = async (search: string) => {
 
 // chats endpoits
 
-export const addNewChat = async (data: CreateNewChat) => {
+export const addNewChat = async (userId: string) => {
+  const data = {
+    targetUserId: userId,
+  };
   try {
     return await api.post(`${CHAT_PARAMS}/create`, data, {
       withCredentials: true,
@@ -86,9 +89,9 @@ export const addNewChat = async (data: CreateNewChat) => {
   }
 };
 
-export const getChatRoom = async (id: string) => {
+export const getChatRoom = async () => {
   try {
-    return await api.get(`${CHAT_PARAMS}/${id}`, { withCredentials: true });
+    return await api.get(`${CHAT_PARAMS}`, { withCredentials: true });
   } catch (error) {
     await handlerError(error);
   }

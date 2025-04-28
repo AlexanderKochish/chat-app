@@ -4,7 +4,6 @@ import {
   HamburgerMenuIcon,
   PersonIcon,
 } from "../../assets/icons";
-import UserCard from "../../components/ui/UserCard/UserCard";
 import s from "./Chat.module.css";
 import DropdownMenuCustom from "../../components/ui/DropdownMenu/DropdownMenu";
 import DialogModal from "../../components/ui/Modal/Modal";
@@ -14,36 +13,46 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { searchSchema, SearchShemaType } from "../../lib/schemas/chat.schema";
 import { useQuery } from "@tanstack/react-query";
-import { getMe } from "../../api/api";
+import { getChatRoom, getMe, searchUserByName } from "../../api/api";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { useDebounce } from "../../hooks/useDebounce";
+import ChatList from "../../components/ChatList/ChatList";
+import UserCard from "../../components/ui/UserCard/UserCard";
+import { ChatRoomResponse } from "../../types/types";
 
 const Chat = () => {
   const navigate = useNavigate();
-  const { isError } = useQuery({
-    queryKey: ["profile"],
-    queryFn: getMe,
-  });
-  const { control, handleSubmit } = useForm<SearchShemaType>({
+
+  const { control, handleSubmit, watch } = useForm<SearchShemaType>({
     defaultValues: {
       search: "",
     },
-
     resolver: zodResolver(searchSchema),
   });
 
-  const onSubmit = async (data: SearchShemaType) => {
-    try {
-      console.log(data);
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        throw new Error("Something went wrong");
-      }
-    }
-  };
+  const search = watch("search");
+  const { debounceValue } = useDebounce({ value: search, delay: 1000 });
+  const { data, isError } = useQuery({
+    queryKey: ["profile", debounceValue],
+    queryFn: async () => {
+      const me = await getMe();
+      const searchName = await searchUserByName(debounceValue);
 
-  if (isError) {
-    navigate("/sign-in", { replace: true });
-  }
+      return { me, searchName };
+    },
+  });
+
+  const { data: myChat } = useQuery({
+    queryKey: ["myChat"],
+    queryFn: getChatRoom,
+  });
+
+  useEffect(() => {
+    if (!data?.me && isError) {
+      navigate("/sign-in", { replace: true });
+    }
+  }, [isError, data?.me, navigate]);
 
   return (
     <section>
@@ -67,9 +76,12 @@ const Chat = () => {
                     </button>
                   }
                 >
-                  <form onSubmit={handleSubmit(onSubmit)}>
-                    <Input control={control} name="search" />
-                  </form>
+                  <>
+                    <form onSubmit={handleSubmit((data) => data)}>
+                      <Input control={control} name="search" />
+                    </form>
+                    <ChatList chatList={data?.searchName?.data} />
+                  </>
                 </DialogModal>
                 <DropdownMenuCustom
                   trigger={
@@ -87,11 +99,16 @@ const Chat = () => {
           </div>
           <div className={s.chatContent}>
             <div className={s.openedChats}>
-              <UserCard />
-              <UserCard />
-              <UserCard />
-              <UserCard />
-              <UserCard />
+              {myChat?.data.map(({ id, members }: ChatRoomResponse) => (
+                <li key={id}>
+                  <UserCard
+                    name={members[1].user.name}
+                    avatar={members[1].user.profile.avatar}
+                    email={members[1].user.email}
+                    userId={members[1].user.profile.userId}
+                  />
+                </li>
+              ))}
             </div>
             <div className={s.roomContent}>
               <div className={s.chatMessagge}>
