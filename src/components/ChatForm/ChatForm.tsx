@@ -8,20 +8,34 @@ import {
 } from "../../lib/schemas/chat.schema";
 import { PaperPlaneIcon } from "../../assets/icons";
 import s from "./ChatForm.module.css";
+import { socket } from "../../socket";
 
-const ChatForm = () => {
+type Props = {
+  roomId: string;
+  ownerId: string;
+};
+
+const ChatForm = ({ roomId, ownerId }: Props) => {
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const { register, handleSubmit, watch, reset } = useForm<MessageSchemaType>({
     defaultValues: {
-      chatMessage: "",
+      text: "",
+      roomId: "",
+      ownerId: "",
     },
     resolver: zodResolver(messageSchema),
   });
-  const chatMessage = watch("chatMessage");
-  useAutosizeTextarea(textAreaRef, chatMessage);
+  const textMessage = watch("text");
+  useAutosizeTextarea(textAreaRef, textMessage);
 
   const onSubmit = (data: MessageSchemaType) => {
-    console.log(data);
+    const message = {
+      roomId,
+      ownerId,
+      text: data.text,
+    };
+
+    socket.emit("sendMessage", message);
     reset();
   };
 
@@ -29,12 +43,12 @@ const ChatForm = () => {
     <form className={s.formMessage} onSubmit={handleSubmit(onSubmit)}>
       <textarea
         className={s.textArea}
-        {...register("chatMessage")}
+        {...register("text")}
         ref={(e) => {
-          register("chatMessage").ref(e);
+          register("text").ref(e);
           textAreaRef.current = e;
         }}
-        name="chatMessage"
+        name="text"
       ></textarea>
       <button className={s.sendBtn}>
         <PaperPlaneIcon width="25" height="25" />

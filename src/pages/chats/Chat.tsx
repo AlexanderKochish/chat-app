@@ -13,16 +13,24 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { searchSchema, SearchShemaType } from "../../lib/schemas/chat.schema";
 import { useQuery } from "@tanstack/react-query";
-import { getChatRoom, getMe, searchUserByName } from "../../api/api";
+import {
+  getChatRoom,
+  getCurrentChat,
+  getMe,
+  searchUserByName,
+} from "../../api/api";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDebounce } from "../../hooks/useDebounce";
 import ChatList from "../../components/ChatList/ChatList";
 import UserCard from "../../components/ui/UserCard/UserCard";
-import { ChatRoomResponse } from "../../types/types";
+import { ChatRoomResponse, Message } from "../../types/types";
+import { socket } from "../../socket";
 
 const Chat = () => {
   const navigate = useNavigate();
+  const [roomId, setRoomId] = useState("");
+  const [messages, setMessages] = useState<Message[]>([]);
 
   const { control, handleSubmit, watch } = useForm<SearchShemaType>({
     defaultValues: {
@@ -33,26 +41,59 @@ const Chat = () => {
 
   const search = watch("search");
   const { debounceValue } = useDebounce({ value: search, delay: 1000 });
-  const { data, isError } = useQuery({
-    queryKey: ["profile", debounceValue],
+  const { data } = useQuery({
+    queryKey: ["users", debounceValue],
+    queryFn: async () => {
+      const searchName = await searchUserByName(debounceValue);
+      return { searchName };
+    },
+    enabled: !!debounceValue,
+  });
+
+  const { data: profile, isError } = useQuery({
+    queryKey: ["profile"],
     queryFn: async () => {
       const me = await getMe();
-      const searchName = await searchUserByName(debounceValue);
-
-      return { me, searchName };
+      return { me };
     },
   });
 
-  const { data: myChat } = useQuery({
-    queryKey: ["myChat"],
+  const { data: myChatRooms } = useQuery({
+    queryKey: ["myChatRooms"],
     queryFn: getChatRoom,
   });
 
   useEffect(() => {
-    if (!data?.me && isError) {
+    if (roomId) {
+      getCurrentChat(roomId).then((res) => {
+        setMessages(res?.data.messages);
+      });
+    }
+  }, [roomId]);
+
+  useEffect(() => {
+    const handleNewMessage = (message: Message) => {
+      if (message.roomId === roomId) {
+        setMessages((prevMessages: Message[]) => [...prevMessages, message]);
+      }
+    };
+    socket.on("newMessage", handleNewMessage);
+
+    return () => {
+      socket.off("newMessage", handleNewMessage);
+    };
+  }, [roomId]);
+
+  const findMyChat = (id: string) => {
+    setRoomId(id);
+    socket.emit("joinRoom", id);
+  };
+
+  useEffect(() => {
+    if (!profile?.me && isError) {
       navigate("/sign-in", { replace: true });
     }
-  }, [isError, data?.me, navigate]);
+  }, [isError, profile?.me, navigate]);
 
   return (
     <section>
@@ -99,33 +140,43 @@ const Chat = () => {
           </div>
           <div className={s.chatContent}>
             <div className={s.openedChats}>
-              {myChat?.data.map(({ id, members }: ChatRoomResponse) => (
-                <li key={id}>
-                  <UserCard
-                    name={members[1].user.name}
-                    avatar={members[1].user.profile.avatar}
-                    email={members[1].user.email}
-                    userId={members[1].user.profile.userId}
-                  />
-                </li>
-              ))}
+              {myChatRooms?.data.map(
+                ({ id, members, messages }: ChatRoomResponse) => (
+                  <li key={id} onClick={() => findMyChat(id)}>
+                    {members.map((user) => {
+                      if (profile?.me?.data.id !== user.userId) {
+                        return (
+                          <UserCard
+                            name={user.user.name}
+                            avatar={user.user.profile.avatar}
+                            email={String(messages[0].text)}
+                            userId={user.userId}
+                            key={user.userId}
+                          />
+                        );
+                      }
+                    })}
+                  </li>
+                ),
+              )}
             </div>
             <div className={s.roomContent}>
               <div className={s.chatMessagge}>
-                {[{ id: 1, senderId: "miu", message: "" }].map((item) => (
-                  <div
-                    key={item?.id}
-                    className={
-                      item.senderId === "miu"
-                        ? s.message
-                        : `${s.message} ${s.own}`
-                    }
-                  >
-                    <span>{item.message}</span>
-                  </div>
-                ))}
+                {messages &&
+                  messages.map((item: Message) => (
+                    <div
+                      key={item?.id}
+                      className={
+                        item.ownerId === profile?.me?.data.id
+                          ? `${s.message} ${s.own}`
+                          : s.message
+                      }
+                    >
+                      <span>{item.text}</span>
+                    </div>
+                  ))}
               </div>
-              <ChatForm />
+              <ChatForm roomId={roomId} ownerId={profile?.me?.data.id} />
             </div>
           </div>
         </div>

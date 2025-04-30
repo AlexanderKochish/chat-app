@@ -1,7 +1,9 @@
 import { z } from "zod";
 
 export const messageSchema = z.object({
-  chatMessage: z.string().trim(),
+  text: z.string().trim(),
+  roomId: z.string(),
+  ownerId: z.string(),
 });
 
 export type MessageSchemaType = z.infer<typeof messageSchema>;

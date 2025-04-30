@@ -89,6 +89,14 @@ export const addNewChat = async (userId: string) => {
   }
 };
 
+export const getCurrentChat = async (roomId: string) => {
+  try {
+    return await api.get(`${CHAT_PARAMS}/${roomId}`, { withCredentials: true });
+  } catch (error) {
+    await handlerError(error);
+  }
+};
+
 export const getChatRoom = async () => {
   try {
     return await api.get(`${CHAT_PARAMS}`, { withCredentials: true });
