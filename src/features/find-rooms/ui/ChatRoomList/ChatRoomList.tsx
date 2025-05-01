@@ -6,9 +6,10 @@ import s from "./ChatRoomList.module.css";
 
 type Props = {
   findMyChat: (id: string) => void;
+  roomId: string;
 };
 
-const ChatRoomList = ({ findMyChat }: Props) => {
+const ChatRoomList = ({ findMyChat, roomId }: Props) => {
   const { me } = useProfile();
   const { chatRooms } = useChatRooms();
   return (
@@ -19,6 +20,7 @@ const ChatRoomList = ({ findMyChat }: Props) => {
             if (me?.id !== user.userId) {
               return (
                 <UserCard
+                  active={id === roomId}
                   name={user.user.name}
                   avatar={user.user.profile.avatar}
                   email={String(messages[0].text)}

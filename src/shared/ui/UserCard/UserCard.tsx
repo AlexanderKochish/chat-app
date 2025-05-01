@@ -6,11 +6,12 @@ type Props = {
   name: string;
   email: string;
   userId: string;
+  active?: boolean;
 };
 
-const UserCard = ({ avatar, email, name }: Props) => {
+const UserCard = ({ avatar, email, name, active }: Props) => {
   return (
-    <div className={s.card}>
+    <div className={active ? `${s.card} ${s.active}` : s.card}>
       <div className={s.img}>
         {avatar ? (
           <img src={avatar} alt={`avatar of ${name}`} />

@@ -33,6 +33,7 @@ const SignIn = () => {
       navigate("/", { replace: true });
     } catch (error: unknown) {
       if (error instanceof Error) {
+        toast.error("Something went wrong");
         throw new Error("Something went wrong");
       }
     }

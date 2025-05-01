@@ -2,10 +2,13 @@
   display: grid;
   grid-template-columns: minmax(200px, 1fr) 3fr;
   height: calc(100% - 78px);
-  overflow-y: auto;
 }
 
 .roomContent {
+  overflow-y: auto;
+}
+
+.contentWrapper {
   display: flex;
   flex-direction: column;
   align-items: center;

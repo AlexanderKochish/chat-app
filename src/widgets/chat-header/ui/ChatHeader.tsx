@@ -9,35 +9,11 @@ import DialogModal from "../../../shared/ui/Modal/Modal";
 import Input from "../../../shared/ui/Input/Input";
 import ChatList from "../../../features/add-chat/ui/chat-list/ChatList";
 import DropdownMenuCustom from "../../../shared/ui/DropdownMenu/DropdownMenu";
-import { useForm } from "react-hook-form";
-import {
-  searchSchema,
-  SearchShemaType,
-} from "../../../features/find-user/model/zod/find-user.schema";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useDebounce } from "../../../shared/hooks/useDebounce";
-import { searchUserByName } from "../../../shared/api";
-import { useQuery } from "@tanstack/react-query";
+import { useSearchUser } from "../../../features/find-user/model/useSearchUser";
 
 const ChatHeader = () => {
-  const { control, handleSubmit, watch } = useForm<SearchShemaType>({
-    defaultValues: {
-      search: "",
-    },
-    resolver: zodResolver(searchSchema),
-  });
+  const { control, handleSubmit, data } = useSearchUser();
 
-  const search = watch("search");
-
-  const { debounceValue } = useDebounce({ value: search, delay: 1000 });
-  const { data } = useQuery({
-    queryKey: ["users", debounceValue],
-    queryFn: async () => {
-      const searchName = await searchUserByName(debounceValue);
-      return { searchName };
-    },
-    enabled: !!debounceValue,
-  });
   return (
     <div className={s.chatsTop}>
       <div className={s.chatsTopHeader}>
@@ -51,6 +27,7 @@ const ChatHeader = () => {
         </div>
         <div className={s.chatNav}>
           <DialogModal
+            position="25"
             trigger={
               <button className={s.btnWrapper}>
                 <GlassIcon width="25" height="25" />
@@ -61,7 +38,7 @@ const ChatHeader = () => {
               <form onSubmit={handleSubmit((data) => data)}>
                 <Input control={control} name="search" />
               </form>
-              <ChatList chatList={data?.searchName?.data} />
+              <ChatList chatList={data} />
             </>
           </DialogModal>
           <DropdownMenuCustom
