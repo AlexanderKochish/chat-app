@@ -2,13 +2,12 @@ import s from "./MessageList.module.css";
 import { Message } from "../../../../shared/types";
 import { useProfile } from "../../../../shared/api/queries/useProfile";
 import { useChatMessages } from "../../../../shared/api/queries/useChatMessages";
+import { useSearchParams } from "react-router-dom";
 
-type Props = {
-  roomId: string;
-};
-
-const MessageList = ({ roomId }: Props) => {
+const MessageList = () => {
   const { me } = useProfile();
+  const [params] = useSearchParams();
+  const roomId = params.get("chatId") as string;
   const messages = useChatMessages(roomId);
 
   return (

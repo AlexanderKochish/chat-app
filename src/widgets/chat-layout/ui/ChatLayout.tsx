@@ -27,11 +27,11 @@ const ChatLayout = () => {
 
   return (
     <div className={s.chatContent}>
-      <ChatRoomList findMyChat={findMyChat} roomId={param} />
+      <ChatRoomList findMyChat={findMyChat} />
       <div className={s.roomContent}>
         <div className={s.contentWrapper}>
-          <MessageList roomId={param} />
-          <ChatForm roomId={param} ownerId={me?.id} />
+          <MessageList />
+          {param && <ChatForm ownerId={me?.id} />}
         </div>
       </div>
     </div>

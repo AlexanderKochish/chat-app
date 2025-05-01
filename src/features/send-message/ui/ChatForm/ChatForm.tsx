@@ -9,13 +9,15 @@ import {
   MessageSchemaType,
 } from "../../model/zod/message.schema";
 import { useSocket } from "../../../../shared/socket";
+import { useSearchParams } from "react-router-dom";
 
 type Props = {
-  roomId: string;
   ownerId: string;
 };
 
-const ChatForm = ({ roomId, ownerId }: Props) => {
+const ChatForm = ({ ownerId }: Props) => {
+  const [param] = useSearchParams();
+  const roomId = param.get("chatId");
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const socket = useSocket();
   const { register, handleSubmit, watch, reset } = useForm<MessageSchemaType>({

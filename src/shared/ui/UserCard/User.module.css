@@ -33,4 +33,26 @@
   display: grid;
   place-content: center;
   padding: 8px;
+  position: relative;
+}
+
+.status {
+  position: absolute;
+  bottom: 0;
+  right: -1px;
+  border: 2px solid #272d3a;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background-color: greenyellow;
+}
+.status.notActive {
+  position: absolute;
+  bottom: 0;
+  right: -1px;
+  border: 2px solid #272d3a;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background-color: rgb(133, 136, 128);
 }

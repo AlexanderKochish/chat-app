@@ -1,3 +1,4 @@
+import { useSearchParams } from "react-router-dom";
 import { useProfile } from "../../../../shared/api/queries/useProfile";
 import { ChatRoomResponse } from "../../../../shared/types";
 import UserCard from "../../../../shared/ui/UserCard/UserCard";
@@ -6,12 +7,14 @@ import s from "./ChatRoomList.module.css";
 
 type Props = {
   findMyChat: (id: string) => void;
-  roomId: string;
 };
 
-const ChatRoomList = ({ findMyChat, roomId }: Props) => {
+const ChatRoomList = ({ findMyChat }: Props) => {
   const { me } = useProfile();
   const { chatRooms } = useChatRooms();
+  const [param] = useSearchParams();
+  const roomId = param.get("chatId");
+
   return (
     <div className={s.openedChats}>
       {chatRooms?.map(({ id, members, messages }: ChatRoomResponse) => (
