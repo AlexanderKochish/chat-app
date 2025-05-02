@@ -4,14 +4,17 @@ const SignUpPage = lazy(() => import("../../pages/auth/SignUpPage"));
 const SignInPage = lazy(() => import("../../pages/auth/SignInPage"));
 const Chat = lazy(() => import("../../pages/chats/Chat"));
 import Spinner from "../../shared/ui/Spinner/Spinner";
+import { SocketWrapper } from "../../shared/socket/SocketWrapper";
 
 export const router = createBrowserRouter([
   {
     path: "/",
     element: (
-      <Suspense fallback={<Spinner />}>
-        <Chat />
-      </Suspense>
+      <SocketWrapper>
+        <Suspense fallback={<Spinner />}>
+          <Chat />
+        </Suspense>
+      </SocketWrapper>
     ),
   },
   {

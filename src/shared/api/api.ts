@@ -16,6 +16,7 @@ import { UpdateProfile } from "../types";
 const api = axios.create({
   baseURL: BASE_API_URL,
   timeout: 1000,
+  withCredentials: true,
   headers: {
     "Content-Type": "application/json",
   },
@@ -31,7 +32,7 @@ const handlerError = async (error: unknown) => {
 // auth endpoints
 export const signUp = async (data: SignUpSchemaType) => {
   try {
-    return await api.post(SIGN_UP_PARAMS, data, { withCredentials: true });
+    return await api.post(SIGN_UP_PARAMS, data);
   } catch (error) {
     await handlerError(error);
   }
@@ -39,7 +40,7 @@ export const signUp = async (data: SignUpSchemaType) => {
 
 export const signIn = async (data: SignInSchemaType) => {
   try {
-    return await api.post(SIGN_IN_PARAMS, data, { withCredentials: true });
+    return await api.post(SIGN_IN_PARAMS, data);
   } catch (error) {
     await handlerError(error);
   }
@@ -48,7 +49,7 @@ export const signIn = async (data: SignInSchemaType) => {
 // profile endpoints
 export const getMe = async () => {
   try {
-    return await api.get(`${PROFILE_PARAMS}/me`, { withCredentials: true });
+    return await api.get(`${PROFILE_PARAMS}/me`);
   } catch (error) {
     await handlerError(error);
   }
@@ -58,7 +59,6 @@ export const updateProfile = async (id: string, data: UpdateProfile) => {
   try {
     return await api.patch(`${PROFILE_PARAMS}/${id}`, data, {
       params: id,
-      withCredentials: true,
     });
   } catch (error) {
     await handlerError(error);
@@ -69,9 +69,19 @@ export const updateProfile = async (id: string, data: UpdateProfile) => {
 export const searchUserByName = async (search: string) => {
   try {
     return await api.get(USERS_PARAMS, {
-      withCredentials: true,
       params: { search },
     });
+  } catch (error) {
+    await handlerError(error);
+  }
+};
+
+export const getUserOnline = async (userIds: string[]) => {
+  const data = {
+    userIds,
+  };
+  try {
+    return await api.post(`${USERS_PARAMS}/online`, data);
   } catch (error) {
     await handlerError(error);
   }
@@ -84,9 +94,7 @@ export const addNewChat = async (userId: string) => {
     targetUserId: userId,
   };
   try {
-    return await api.post(`${CHAT_PARAMS}/create`, data, {
-      withCredentials: true,
-    });
+    return await api.post(`${CHAT_PARAMS}/create`, data, {});
   } catch (error) {
     await handlerError(error);
   }
@@ -94,7 +102,7 @@ export const addNewChat = async (userId: string) => {
 
 export const getCurrentChat = async (roomId: string) => {
   try {
-    return await api.get(`${CHAT_PARAMS}/${roomId}`, { withCredentials: true });
+    return await api.get(`${CHAT_PARAMS}/${roomId}`);
   } catch (error) {
     await handlerError(error);
   }
@@ -102,7 +110,7 @@ export const getCurrentChat = async (roomId: string) => {
 
 export const getChatRoom = async () => {
   try {
-    return await api.get(`${CHAT_PARAMS}`, { withCredentials: true });
+    return await api.get(`${CHAT_PARAMS}`);
   } catch (error) {
     await handlerError(error);
   }

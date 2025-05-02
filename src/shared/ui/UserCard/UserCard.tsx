@@ -5,11 +5,11 @@ type Props = {
   avatar: string;
   name: string;
   email: string;
-  userId: string;
   active?: boolean;
+  isOnline: boolean;
 };
 
-const UserCard = ({ avatar, email, name, active }: Props) => {
+const UserCard = ({ avatar, email, name, active, isOnline }: Props) => {
   return (
     <div className={active ? `${s.card} ${s.active}` : s.card}>
       <div className={s.img}>
@@ -18,7 +18,9 @@ const UserCard = ({ avatar, email, name, active }: Props) => {
         ) : (
           <PersonIcon width="25" height="25" />
         )}
-        <div className={`${s.status} ${s.notActive}`}></div>
+        <div
+          className={isOnline ? s.status : `${s.status} ${s.notActive}`}
+        ></div>
       </div>
       <div>
         <div>{name}</div>
