@@ -10,11 +10,11 @@ export const router = createBrowserRouter([
   {
     path: "/",
     element: (
-      <SocketWrapper>
-        <Suspense fallback={<Spinner />}>
+      <Suspense fallback={<Spinner />}>
+        <SocketWrapper>
           <Chat />
-        </Suspense>
-      </SocketWrapper>
+        </SocketWrapper>
+      </Suspense>
     ),
   },
   {

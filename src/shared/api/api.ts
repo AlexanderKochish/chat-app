@@ -15,7 +15,6 @@ import { UpdateProfile } from "../types";
 
 const api = axios.create({
   baseURL: BASE_API_URL,
-  timeout: 1000,
   withCredentials: true,
   headers: {
     "Content-Type": "application/json",
@@ -96,7 +95,7 @@ export const addNewChat = async (userId: string) => {
     targetUserId: userId,
   };
   try {
-    return await api.post(`${CHAT_PARAMS}/create`, data, {});
+    return await api.post(`${CHAT_PARAMS}/create`, data);
   } catch (error) {
     await handlerError(error);
   }

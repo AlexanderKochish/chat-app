@@ -2,7 +2,7 @@ import { PersonIcon } from "../../assets/icons";
 import s from "./UserCard.module.css";
 
 type Props = {
-  avatar: string;
+  avatar: string | null;
   name: string;
   email: string;
   active?: boolean;
@@ -22,7 +22,7 @@ const UserCard = ({ avatar, email, name, active, isOnline }: Props) => {
           className={isOnline ? s.status : `${s.status} ${s.notActive}`}
         ></div>
       </div>
-      <div>
+      <div className={s.content}>
         <div>{name}</div>
         <div>{email}</div>
       </div>

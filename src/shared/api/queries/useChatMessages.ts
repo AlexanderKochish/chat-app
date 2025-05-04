@@ -16,17 +16,20 @@ export const useChatMessages = (roomId: string) => {
   }, [roomId]);
 
   useEffect(() => {
+    if (!socket) return;
+
     const handleNewMessage = (message: Message) => {
       if (message.roomId === roomId) {
         setMessages((prevMessages: Message[]) => [...prevMessages, message]);
       }
     };
-    socket?.on("newMessage", handleNewMessage);
+
+    socket.on("newMessage", handleNewMessage);
 
     return () => {
-      socket?.off("newMessage", handleNewMessage);
+      socket.off("newMessage", handleNewMessage);
     };
-  }, [socket, roomId]);
+  }, [roomId, socket]);
 
   return messages;
 };

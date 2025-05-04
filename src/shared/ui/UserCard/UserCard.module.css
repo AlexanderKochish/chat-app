@@ -63,3 +63,7 @@
   object-fit: cover;
   border-radius: 50%;
 }
+
+.content {
+  overflow: hidden;
+}

@@ -6,6 +6,7 @@ export const useJoinRoom = () => {
 
   const joinRoom = useCallback(
     (roomId: string) => {
+      if (!socket) return;
       if (!roomId) return;
 
       socket.emit("joinRoom", roomId);

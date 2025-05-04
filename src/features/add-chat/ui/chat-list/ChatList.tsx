@@ -19,12 +19,7 @@ const ChatList = ({ chatList }: Props) => {
       {chatList &&
         chatList.map(({ profile, name, email }) => (
           <li key={profile.userId} onClick={() => mutate(profile.userId)}>
-            <UserCard
-              name={name}
-              userId={profile.userId}
-              email={email}
-              avatar={profile.avatar}
-            />
+            <UserCard name={name} email={email} avatar={profile.avatar} />
           </li>
         ))}
     </ul>
