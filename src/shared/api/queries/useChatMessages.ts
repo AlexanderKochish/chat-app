@@ -21,10 +21,10 @@ export const useChatMessages = (roomId: string) => {
         setMessages((prevMessages: Message[]) => [...prevMessages, message]);
       }
     };
-    socket.on("newMessage", handleNewMessage);
+    socket?.on("newMessage", handleNewMessage);
 
     return () => {
-      socket.off("newMessage", handleNewMessage);
+      socket?.off("newMessage", handleNewMessage);
     };
   }, [socket, roomId]);
 

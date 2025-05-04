@@ -1,6 +1,6 @@
 export type Profile = {
-  bgImage: string;
-  avatar: string;
+  bgImage: File | string | null;
+  avatar: File | string | null;
   bio: string;
   userId: string;
   id: string;

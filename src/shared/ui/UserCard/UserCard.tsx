@@ -1,5 +1,5 @@
 import { PersonIcon } from "../../assets/icons";
-import s from "./User.module.css";
+import s from "./UserCard.module.css";
 
 type Props = {
   avatar: string;
@@ -14,7 +14,7 @@ const UserCard = ({ avatar, email, name, active, isOnline }: Props) => {
     <div className={active ? `${s.card} ${s.active}` : s.card}>
       <div className={s.img}>
         {avatar ? (
-          <img src={avatar} alt={`avatar of ${name}`} />
+          <img src={avatar} alt={`avatar of ${name}`} className={s.avatar} />
         ) : (
           <PersonIcon width="25" height="25" />
         )}

@@ -6,16 +6,17 @@ import { CloseIcon } from "../../assets/icons";
 type Props = {
   trigger: ReactElement;
   children: ReactElement;
-  position: "25" | "50";
+  position: string;
+  title?: string;
 };
 
-const DialogModal = ({ trigger, children, position = "50" }: Props) => (
+const DialogModal = ({ trigger, children, position = "50", title }: Props) => (
   <Dialog.Root>
     <Dialog.Trigger asChild>{trigger}</Dialog.Trigger>
     <Dialog.Portal>
       <Dialog.Overlay className={s.overlay} />
       <Dialog.Content style={{ top: `${position}%` }} className={s.content}>
-        <Dialog.Title className={s.title}>Search</Dialog.Title>
+        <Dialog.Title className={s.title}>{title}</Dialog.Title>
         <Dialog.Description className={s.description}></Dialog.Description>
         {children}
         <Dialog.Close asChild>

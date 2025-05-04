@@ -10,6 +10,7 @@ import Input from "../../../shared/ui/Input/Input";
 import ChatList from "../../../features/add-chat/ui/chat-list/ChatList";
 import DropdownMenuCustom from "../../../shared/ui/DropdownMenu/DropdownMenu";
 import { useSearchUser } from "../../../features/find-user/model/useSearchUser";
+import { Profile } from "../../../features/profile/ui/Profile/Profile";
 
 const ChatHeader = () => {
   const { control, handleSubmit, data } = useSearchUser();
@@ -27,6 +28,7 @@ const ChatHeader = () => {
         </div>
         <div className={s.chatNav}>
           <DialogModal
+            title="Search"
             position="25"
             trigger={
               <button className={s.btnWrapper}>
@@ -51,7 +53,12 @@ const ChatHeader = () => {
                 />
               </button>
             }
-          />
+          >
+            <button>Log out</button>
+            <DialogModal position="40" trigger={<button>Profile</button>}>
+              <Profile />
+            </DialogModal>
+          </DropdownMenuCustom>
         </div>
       </div>
     </div>

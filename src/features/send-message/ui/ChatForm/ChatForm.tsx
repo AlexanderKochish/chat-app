@@ -38,7 +38,7 @@ const ChatForm = ({ ownerId }: Props) => {
       text: data.text,
     };
 
-    socket.emit("sendMessage", message);
+    socket?.emit("sendMessage", message);
     reset();
   };
 

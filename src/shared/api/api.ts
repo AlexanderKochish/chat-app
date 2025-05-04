@@ -58,7 +58,9 @@ export const getMe = async () => {
 export const updateProfile = async (id: string, data: UpdateProfile) => {
   try {
     return await api.patch(`${PROFILE_PARAMS}/${id}`, data, {
-      params: id,
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
     });
   } catch (error) {
     await handlerError(error);
