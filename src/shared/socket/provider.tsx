@@ -12,7 +12,7 @@ export const SocketProvider = ({ children, userId }: Props) => {
   const [socket, setSocket] = useState<Socket | null>(null);
 
   useEffect(() => {
-    if(!userId) return;
+    if (!userId) return;
     const socketInstace = io(URL, {
       auth: { userId },
     });

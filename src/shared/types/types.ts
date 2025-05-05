@@ -1,6 +1,6 @@
 export type Profile = {
-  bgImage: File | string | null;
-  avatar: File | string | null;
+  bgImage?: File | string | null;
+  avatar?: File | string | null;
   bio: string;
   userId: string;
   id: string;
@@ -13,12 +13,19 @@ export type User = {
   profile: Profile;
 };
 
+export type Image = {
+  id: string;
+  messageId: string;
+  url: string;
+};
 export type Message = {
   id: string;
   text: string;
 
   createdAt: string;
   updatedAt: string;
+
+  images?: Image[];
 
   roomId: string;
   ownerId: string;

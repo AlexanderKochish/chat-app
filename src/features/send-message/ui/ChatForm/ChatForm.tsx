@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRef } from "react";
 import { useForm } from "react-hook-form";
-import { PaperPlaneIcon } from "../../../../shared/assets/icons";
+import { PaperPlaneIcon, UploadIcon } from "../../../../shared/assets/icons";
 import s from "./ChatForm.module.css";
 import { useAutosizeTextarea } from "../../../../shared/hooks/useAutosizeTextarea";
 import {
@@ -19,6 +19,7 @@ const ChatForm = ({ ownerId }: Props) => {
   const [param] = useSearchParams();
   const roomId = param.get("chatId");
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
+  const fileRef = useRef<HTMLInputElement | null>(null);
   const socket = useSocket();
   const { register, handleSubmit, watch, reset } = useForm<MessageSchemaType>({
     defaultValues: {
@@ -31,11 +32,27 @@ const ChatForm = ({ ownerId }: Props) => {
   const textMessage = watch("text");
   useAutosizeTextarea(textAreaRef, textMessage);
 
-  const onSubmit = (data: MessageSchemaType) => {
+  const fileToArrayBufferPayload = async (file: File) => {
+    const arrayBuffer = await file.arrayBuffer();
+    return {
+      name: file.name,
+      type: file.type,
+      buffer: Array.from(new Uint8Array(arrayBuffer)),
+    };
+  };
+
+  const onSubmit = async (data: MessageSchemaType) => {
+    const files = fileRef.current?.files;
+
+    const buffers =
+      files &&
+      (await Promise.all(Array.from(files).map(fileToArrayBufferPayload)));
+
     const message = {
       roomId,
       ownerId,
       text: data.text,
+      images: buffers,
     };
 
     socket?.emit("sendMessage", message);
@@ -44,15 +61,27 @@ const ChatForm = ({ ownerId }: Props) => {
 
   return (
     <form className={s.formMessage} onSubmit={handleSubmit(onSubmit)}>
-      <textarea
-        className={s.textArea}
-        {...register("text")}
-        ref={(e) => {
-          register("text").ref(e);
-          textAreaRef.current = e;
-        }}
-        name="text"
-      ></textarea>
+      <div className={s.formInner}>
+        <textarea
+          className={s.textArea}
+          {...register("text")}
+          ref={(e) => {
+            register("text").ref(e);
+            textAreaRef.current = e;
+          }}
+          name="text"
+        ></textarea>
+        <label htmlFor="images" className={s.fileLabel}>
+          <UploadIcon width="30" height="30" />
+        </label>
+        <input
+          {...register("images")}
+          type="file"
+          id="images"
+          className={s.file}
+          ref={fileRef}
+        />
+      </div>
       <button className={s.sendBtn}>
         <PaperPlaneIcon width="25" height="25" />
       </button>
