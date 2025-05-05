@@ -1,17 +1,26 @@
-import { ReactElement } from "react";
+import { ReactNode } from "react";
 import { Dialog } from "radix-ui";
 import s from "./Modal.module.css";
 import { CloseIcon } from "../../assets/icons";
 
 type Props = {
-  trigger: ReactElement;
-  children: ReactElement;
+  trigger?: ReactNode;
+  children?: ReactNode;
   position: string;
   title?: string;
+  isOpen?: boolean;
+  setIsOpen: (isOpen: boolean) => void;
 };
 
-const DialogModal = ({ trigger, children, position = "50", title }: Props) => (
-  <Dialog.Root>
+const DialogModal = ({
+  trigger,
+  children,
+  position = "50",
+  title,
+  isOpen,
+  setIsOpen,
+}: Props) => (
+  <Dialog.Root open={isOpen}>
     <Dialog.Trigger asChild>{trigger}</Dialog.Trigger>
     <Dialog.Portal>
       <Dialog.Overlay className={s.overlay} />
@@ -19,7 +28,7 @@ const DialogModal = ({ trigger, children, position = "50", title }: Props) => (
         <Dialog.Title className={s.title}>{title}</Dialog.Title>
         <Dialog.Description className={s.description}></Dialog.Description>
         {children}
-        <Dialog.Close asChild>
+        <Dialog.Close onClick={() => setIsOpen(!isOpen)} asChild>
           <button className={s.iconButton} aria-label="Close">
             <CloseIcon />
           </button>
