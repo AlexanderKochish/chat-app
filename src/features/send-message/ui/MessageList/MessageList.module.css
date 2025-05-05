@@ -7,7 +7,7 @@
 
 .message {
   display: flex;
-  margin: 5px 0;
+  margin: 10px 0;
   flex: 1;
   justify-content: flex-start;
 }
@@ -23,7 +23,7 @@
   flex-direction: column;
   background-color: #3d3d3d;
   padding: 4px 10px 7px 10px;
-  border-radius: 15px;
+  border-radius: 15px 15px 15px 0px;
 }
 
 .messageWrapper.own {
@@ -31,10 +31,12 @@
   margin: 5px 0;
   justify-content: flex-end;
   background-color: #008dad;
+  border-radius: 15px 0px 15px 15px;
 }
 
 .messageImage {
   width: 200px;
   height: 220px;
   border-radius: 10px;
+  object-fit: cover;
 }

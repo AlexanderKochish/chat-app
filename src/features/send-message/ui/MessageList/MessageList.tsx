@@ -10,7 +10,6 @@ const MessageList = () => {
   const roomId = params.get("chatId") as string;
   const messages = useChatMessages(roomId);
 
-  console.log(messages);
   return (
     <div className={s.chatMessagge}>
       {messages &&
@@ -33,13 +32,16 @@ const MessageList = () => {
               >
                 <span>{item.text}</span>
 
-                {!!item.images?.length && (
-                  <img
-                    src={item?.images[0].url}
-                    alt="message"
-                    className={s.messageImage}
-                  />
-                )}
+                {item.images &&
+                  item.images.length > 0 &&
+                  item.images.map(({ id, url }) => (
+                    <img
+                      key={id}
+                      src={url}
+                      alt="message"
+                      className={s.messageImage}
+                    />
+                  ))}
               </div>
             </div>
           ))}

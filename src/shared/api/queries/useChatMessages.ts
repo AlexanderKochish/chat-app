@@ -13,7 +13,7 @@ export const useChatMessages = (roomId: string) => {
         setMessages(res?.data.messages);
       });
     }
-  }, [roomId]);
+  }, [roomId, messages.length]);
 
   useEffect(() => {
     if (!socket) return;
