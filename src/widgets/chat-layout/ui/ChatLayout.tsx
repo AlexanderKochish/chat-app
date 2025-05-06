@@ -43,7 +43,7 @@ const ChatLayout = () => {
       <div className={s.roomContent}>
         <div className={s.contentWrapper} ref={ref}>
           <MessageList />
-          {param && <ChatForm ownerId={me?.id} />}
+          {param && <ChatForm />}
         </div>
       </div>
     </div>
