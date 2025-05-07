@@ -24,6 +24,11 @@
   background-color: #3d3d3d;
   padding: 4px 10px 7px 10px;
   border-radius: 15px 15px 15px 0px;
+  gap: 5px;
+
+  & > .createdAt {
+    text-align: end;
+  }
 }
 
 .messageWrapper.own {
@@ -32,6 +37,7 @@
   justify-content: flex-end;
   background-color: #008dad;
   border-radius: 15px 0px 15px 15px;
+  gap: 5px;
 }
 
 .messageImage {
@@ -39,4 +45,8 @@
   height: 220px;
   border-radius: 10px;
   object-fit: cover;
+}
+
+.createdAt {
+  font-size: 12px;
 }

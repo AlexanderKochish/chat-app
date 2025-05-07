@@ -3,6 +3,7 @@ import { Message } from "../../../../shared/types";
 import { useProfile } from "../../../../shared/api/queries/useProfile";
 import { useChatMessages } from "../../../../shared/api/queries/useChatMessages";
 import { useSearchParams } from "react-router-dom";
+import { format } from "date-fns";
 
 const MessageList = () => {
   const { me } = useProfile();
@@ -42,6 +43,9 @@ const MessageList = () => {
                       className={s.messageImage}
                     />
                   ))}
+                <span className={s.createdAt}>
+                  {format(new Date(item.createdAt), "hh:mm a")}
+                </span>
               </div>
             </div>
           ))}
