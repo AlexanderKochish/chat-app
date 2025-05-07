@@ -1,12 +1,21 @@
-import { PaperPlaneIcon, UploadIcon } from "../../../../shared/assets/icons";
+import { lazy, Suspense } from "react";
+import {
+  EmojiIcon,
+  PaperPlaneIcon,
+  UploadIcon,
+} from "../../../../shared/assets/icons";
 import s from "./ChatForm.module.css";
 import ReactCrop from "react-image-crop";
 import CropFileModal from "../CropFileModal/CropFileModal";
 import { useChatFormLogic } from "../../model/hooks/useChatFormLogic";
+const EmojiPicker = lazy(() => import("emoji-picker-react"));
+import TooltipCustom from "../../../../shared/ui/Tooltip/Tooltip";
+import Spinner from "../../../../shared/ui/Spinner/Spinner";
+import { EmojiClickData, Theme } from "emoji-picker-react";
 
 const ChatForm = () => {
   const {
-    formProps: { handleSubmit, register, textAreaRef },
+    formProps: { handleSubmit, register, textAreaRef, setValue, watch },
     cropProps: {
       crop,
       imgSrc,
@@ -20,18 +29,29 @@ const ChatForm = () => {
     fileInputProps: { handleFileChange },
   } = useChatFormLogic();
 
+  const text = watch("text");
+  const handleEmojiClick = (data: EmojiClickData) => {
+    const newValue = text + data.emoji;
+    setValue("text", newValue);
+  };
+
   return (
     <form className={s.formMessage} onSubmit={handleSubmit}>
       <div className={s.formInner}>
+        <TooltipCustom trigger={<EmojiIcon width="30" height="30" />}>
+          <Suspense fallback={<Spinner />}>
+            <EmojiPicker theme={Theme.AUTO} onEmojiClick={handleEmojiClick} />
+          </Suspense>
+        </TooltipCustom>
         <textarea
           className={s.textArea}
           {...register("text")}
+          name="text"
           ref={(e) => {
             register("text").ref(e);
             textAreaRef.current = e;
           }}
-          name="text"
-        ></textarea>
+        />
         <CropFileModal setIsOpen={setIsOpen} isOpen={isOpen} position="50">
           {!!imgSrc && (
             <ReactCrop

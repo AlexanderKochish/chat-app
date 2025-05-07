@@ -78,6 +78,8 @@ export const useChatFormLogic = () => {
       register,
       handleSubmit: handleSubmit(onSubmit),
       textAreaRef,
+      setValue,
+      watch,
     },
     cropProps: {
       crop,
