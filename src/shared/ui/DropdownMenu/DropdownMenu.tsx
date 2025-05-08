@@ -12,6 +12,7 @@ const DropdownMenuCustom = ({ trigger, children }: Props) => {
       <DropdownMenu.Trigger asChild>{trigger}</DropdownMenu.Trigger>
       <DropdownMenu.Portal>
         <DropdownMenu.Content className={s.content} sideOffset={5}>
+          <DropdownMenu.Arrow className={s.arrow} />
           {children}
         </DropdownMenu.Content>
       </DropdownMenu.Portal>

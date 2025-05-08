@@ -23,7 +23,7 @@
     cursor: pointer;
     border-radius: 10px;
     gap: 8px;
-    background-color: #335296;
+    background-color: #766ac8;
   }
 }
 
@@ -66,4 +66,19 @@
 
 .content {
   overflow: hidden;
+  width: 100%;
+}
+
+.lastMessage {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+
+  & > span {
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 }

@@ -44,3 +44,41 @@
     background-color: #454e60;
   }
 }
+
+.profileBtn {
+  display: inline-flex;
+  align-items: center;
+  width: 100%;
+  grid: 10px;
+  border: none;
+  background-color: inherit;
+  cursor: pointer;
+  font-size: 16px;
+  position: relative;
+  transition: all 0.2s linear;
+  padding: 5px;
+  border-radius: 4px;
+
+  & > span {
+    margin-left: 10px;
+  }
+
+  &:hover {
+    background-color: #454e60;
+  }
+}
+
+.profileBtn.delete {
+  color: #d93733;
+}
+
+@media (width < 640px) {
+  .chatsTop {
+    display: grid;
+    grid-template-columns: 1fr;
+    border-bottom: 1px solid #3d3d3d;
+  }
+  .topNavbar {
+    display: none;
+  }
+}

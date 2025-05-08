@@ -1,11 +1,11 @@
 .content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px 5px;
   min-width: 150px;
-  background-color: rgb(55, 74, 92);
-  border-radius: 6px;
-  padding: 5px;
-  box-shadow:
-    0px 10px 38px -10px rgba(22, 23, 24, 0.35),
-    0px 10px 20px -15px rgba(22, 23, 24, 0.2);
+  background-color: #2c2c2c;
+  border-radius: 10px;
   animation-duration: 400ms;
   animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
   will-change: transform, opacity;
@@ -21,6 +21,10 @@
   &[data-side="left"] {
     animation-name: slideRightAndFade;
   }
+}
+
+.arrow {
+  fill: #2c2c2c;
 }
 
 .item {

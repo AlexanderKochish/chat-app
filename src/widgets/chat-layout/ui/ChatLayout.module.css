@@ -16,3 +16,20 @@
   justify-content: space-between;
   width: 70%;
 }
+
+@media (width < 1024px) {
+  .contentWrapper {
+    width: 90%;
+  }
+}
+
+@media (width < 640px) {
+  .chatContent {
+    display: grid;
+    grid-template-columns: 1fr;
+    height: calc(100% - 78px);
+  }
+  .contentWrapper {
+    display: none;
+  }
+}

@@ -40,7 +40,7 @@ const ChatRoomList = ({ findMyChat }: Props) => {
                   active={id === roomId}
                   name={user.user.name}
                   avatar={user.user.profile.avatar as string}
-                  email={String(messages[0].text)}
+                  lastMessage={String(messages[0].text)}
                   key={user.userId}
                   isOnline={Boolean(data?.[user.userId])}
                 />
