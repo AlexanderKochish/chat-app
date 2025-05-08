@@ -1,7 +1,7 @@
 .formMessage {
   display: flex;
   align-items: center;
-  padding: 20px;
+  padding: 20px 0;
   width: 100%;
   column-gap: 20px;
 }
@@ -32,12 +32,6 @@
   transition: height 0.2s ease;
 }
 
-.formInner {
-  width: 100%;
-  display: flex;
-  align-items: center;
-}
-
 .fileLabel {
   cursor: pointer;
   margin: 0 15px;
@@ -45,4 +39,10 @@
 
 .file {
   display: none;
+}
+
+@media (width < 640px) {
+  .fileLabel {
+    margin: 0 10px;
+  }
 }

@@ -1,35 +1,43 @@
 .chatContent {
   display: grid;
-  grid-template-columns: minmax(200px, 1fr) 3fr;
-  height: calc(100% - 78px);
+  grid-template-columns: 280px 1fr;
+  height: 100%;
 }
 
 .roomContent {
-  overflow-y: auto;
+  position: relative;
 }
 
 .contentWrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
+  flex: 1;
   margin: 0 auto;
   justify-content: space-between;
-  width: 70%;
+  width: 100%;
+  overflow-y: auto;
+  height: calc(100vh - 77px);
+}
+
+.content {
+  width: 80%;
+}
+
+.chatContent.mobile {
+  display: block;
+}
+
+.chatList.hidden {
+  display: none;
+}
+
+.roomContent.hidden {
+  display: none;
 }
 
 @media (width < 1024px) {
-  .contentWrapper {
-    width: 90%;
-  }
-}
-
-@media (width < 640px) {
-  .chatContent {
-    display: grid;
-    grid-template-columns: 1fr;
-    height: calc(100% - 78px);
-  }
-  .contentWrapper {
-    display: none;
+  .content {
+    width: 95%;
   }
 }

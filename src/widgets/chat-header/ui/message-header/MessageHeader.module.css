@@ -1,0 +1,66 @@
+.topNavbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #3d3d3d;
+  padding: 20px;
+  gap: 10px;
+  min-height: 77px;
+  position: sticky;
+  top: 0;
+  background-color: #212121;
+}
+
+.chosenUser {
+  display: flex;
+  align-items: center;
+  column-gap: 10px;
+}
+
+.chatNav {
+  display: flex;
+  align-items: center;
+  column-gap: 20px;
+}
+
+.btnWrapper {
+  padding: 4px;
+  border-radius: 50%;
+  display: grid;
+  place-content: center;
+  background-color: inherit;
+  border: none;
+  transition: all 0.2s linear;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #454e60;
+  }
+}
+
+.profileBtn {
+  display: inline-flex;
+  align-items: center;
+  width: 100%;
+  grid: 10px;
+  border: none;
+  background-color: inherit;
+  cursor: pointer;
+  font-size: 16px;
+  position: relative;
+  transition: all 0.2s linear;
+  padding: 5px;
+  border-radius: 4px;
+
+  & > span {
+    margin-left: 10px;
+  }
+
+  &:hover {
+    background-color: #454e60;
+  }
+}
+
+.profileBtn.delete {
+  color: #d93733;
+}

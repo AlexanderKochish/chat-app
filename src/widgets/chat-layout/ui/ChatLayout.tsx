@@ -1,12 +1,16 @@
 import { useNavigate } from "react-router-dom";
 import s from "./ChatLayout.module.css";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import ChatForm from "../../../features/send-message/ui/ChatForm/ChatForm";
 import { useJoinRoom } from "../../../features/join-room/model/useJoinRoom";
 import { useProfile } from "../../../shared/api/queries/useProfile";
 import ChatRoomList from "../../../features/find-rooms/ui/ChatRoomList/ChatRoomList";
 import MessageList from "../../../features/send-message/ui/MessageList/MessageList";
 import { useSearchQuery } from "../../../shared/hooks/useSearchQuery";
+import { useMatchMedia } from "../../../shared/hooks/useMatchMedia";
+import clsx from "clsx";
+import MessageHeader from "../../chat-header/ui/message-header/MessageHeader";
+import MainHeader from "../../chat-header/ui/main-header/MainHeader";
 
 const ChatLayout = () => {
   const navigate = useNavigate();
@@ -14,9 +18,12 @@ const ChatLayout = () => {
   const { me, isError } = useProfile();
   const { param, setSearchParams } = useSearchQuery("chatId");
   const ref = useRef<HTMLDivElement | null>(null);
+  const { isMobile } = useMatchMedia();
+  const [isActive, setIsActive] = useState(false);
 
   const findMyChat = (id: string) => {
     setSearchParams(id);
+    setIsActive((prev) => !prev);
   };
 
   useEffect(() => {
@@ -29,7 +36,11 @@ const ChatLayout = () => {
     if (ref.current) {
       ref.current.scrollIntoView({ behavior: "smooth" });
     }
-  }, []);
+
+    if (ref.current) {
+      ref.current.scrollTop = ref.current.scrollHeight;
+    }
+  }, [param]);
 
   useEffect(() => {
     if (!me.id && isError) {
@@ -37,13 +48,24 @@ const ChatLayout = () => {
     }
   }, [isError, me.id, navigate]);
 
+  const clazz =
+    isMobile && param ? clsx(s.chatContent, s.mobile) : s.chatContent;
+  const chatListClass = clsx(s.chatList, !isActive && isMobile && s.hidden);
+  const roomClass = clsx(s.roomContent, isActive && isMobile && s.hidden);
+
   return (
-    <div className={s.chatContent}>
-      <ChatRoomList findMyChat={findMyChat} />
-      <div className={s.roomContent}>
+    <div className={clazz}>
+      <div className={chatListClass}>
+        <MainHeader />
+        <ChatRoomList findMyChat={findMyChat} />
+      </div>
+      <div className={roomClass}>
+        <MessageHeader setIsActive={setIsActive} />
         <div className={s.contentWrapper} ref={ref}>
-          <MessageList />
-          {param && <ChatForm />}
+          <div className={s.content}>
+            <MessageList />
+            {param && <ChatForm />}
+          </div>
         </div>
       </div>
     </div>
