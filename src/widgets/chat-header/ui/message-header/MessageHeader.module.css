@@ -1,13 +1,12 @@
 .topNavbar {
+  grid-area: header;
   display: flex;
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid #3d3d3d;
-  padding: 20px;
+  padding: 5px 20px;
   gap: 10px;
-  min-height: 77px;
-  position: sticky;
-  top: 0;
+  height: 70px;
   background-color: #212121;
 }
 
@@ -63,4 +62,11 @@
 
 .profileBtn.delete {
   color: #d93733;
+}
+
+.avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
 }

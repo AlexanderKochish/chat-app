@@ -1,20 +1,19 @@
 .chatMessagge {
-  width: 100%;
-  direction: flex;
-  gap: 15px;
-  padding: 10px 0;
+  width: 80%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column-reverse;
+  overflow-y: auto;
+  height: calc(100vh - 70px);
 }
 
 .message {
   display: flex;
-  margin: 10px 0;
-  flex: 1;
   justify-content: flex-start;
 }
 
 .message.own {
   display: flex;
-  margin: 5px 0;
   justify-content: flex-end;
 }
 
@@ -49,4 +48,12 @@
 
 .createdAt {
   font-size: 12px;
+}
+
+@media (width < 640px) {
+  .chatMessagge {
+    width: 100%;
+    margin: 0;
+    padding: 0 10px;
+  }
 }

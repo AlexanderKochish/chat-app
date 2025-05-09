@@ -116,3 +116,11 @@ export const getChatRoom = async () => {
     await handlerError(error);
   }
 };
+
+export const getCompanion = async (roomId: string) => {
+  try {
+    return await api.get(`${CHAT_PARAMS}/${roomId}/companion`);
+  } catch (error) {
+    await handlerError(error);
+  }
+};

@@ -15,14 +15,25 @@ import ChatList from "../../../../features/add-chat/ui/chat-list/ChatList";
 import DropdownMenuCustom from "../../../../shared/ui/DropdownMenu/DropdownMenu";
 import clsx from "clsx";
 import { useMatchMedia } from "../../../../shared/hooks/useMatchMedia";
+import { useQuery } from "@tanstack/react-query";
+import { useSearchParams } from "react-router-dom";
+import { getCompanion } from "../../../../shared/api";
 
 type Props = {
   setIsActive: (isActive: boolean) => void;
 };
 
 const MessageHeader = ({ setIsActive }: Props) => {
+  const [param] = useSearchParams();
+  const roomId = param.get("chatId") as string;
   const { control, handleSubmit, data } = useSearchUser();
   const { isMobile } = useMatchMedia();
+
+  const { data: companion } = useQuery({
+    queryKey: ["companion", roomId],
+    queryFn: () => getCompanion(roomId),
+    select: (res) => res?.data,
+  });
   return (
     <div className={s.topNavbar}>
       <div className={s.chosenUser}>
@@ -32,8 +43,16 @@ const MessageHeader = ({ setIsActive }: Props) => {
           </button>
         )}
 
-        <PersonIcon width="25" height="25" />
-        <span>User</span>
+        {companion?.user.profile.avatar ? (
+          <img
+            src={companion.user.profile.avatar}
+            alt="avatar"
+            className={s.avatar}
+          />
+        ) : (
+          <PersonIcon width="50" height="50" />
+        )}
+        <span>{companion?.user.name}</span>
       </div>
       <div className={s.chatNav}>
         <DialogModal

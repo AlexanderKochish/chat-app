@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import s from "./ChatLayout.module.css";
 import { useEffect, useRef, useState } from "react";
-import ChatForm from "../../../features/send-message/ui/ChatForm/ChatForm";
 import { useJoinRoom } from "../../../features/join-room/model/useJoinRoom";
 import { useProfile } from "../../../shared/api/queries/useProfile";
 import ChatRoomList from "../../../features/find-rooms/ui/ChatRoomList/ChatRoomList";
@@ -59,14 +58,9 @@ const ChatLayout = () => {
         <MainHeader />
         <ChatRoomList findMyChat={findMyChat} />
       </div>
-      <div className={roomClass}>
-        <MessageHeader setIsActive={setIsActive} />
-        <div className={s.contentWrapper} ref={ref}>
-          <div className={s.content}>
-            <MessageList />
-            {param && <ChatForm />}
-          </div>
-        </div>
+      <MessageHeader setIsActive={setIsActive} />
+      <div className={roomClass} ref={ref}>
+        <MessageList />
       </div>
     </div>
   );

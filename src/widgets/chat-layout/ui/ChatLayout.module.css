@@ -1,27 +1,22 @@
 .chatContent {
   display: grid;
-  grid-template-columns: 280px 1fr;
-  height: 100%;
+  grid-template-areas:
+    "sidebar header"
+    "sidebar content";
+  grid-template-columns: 400px 1fr;
+  grid-template-rows: 70px 1fr;
+  height: 100vh;
+  overflow-y: hidden;
+}
+
+.chatList {
+  grid-area: sidebar;
 }
 
 .roomContent {
-  position: relative;
-}
-
-.contentWrapper {
+  grid-area: content;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  flex: 1;
-  margin: 0 auto;
-  justify-content: space-between;
-  width: 100%;
-  overflow-y: auto;
-  height: calc(100vh - 77px);
-}
-
-.content {
-  width: 80%;
 }
 
 .chatContent.mobile {
@@ -37,7 +32,11 @@
 }
 
 @media (width < 1024px) {
-  .content {
+  .roomContent {
+    grid-area: content;
     width: 95%;
+  }
+  .chatContent {
+    grid-template-columns: 300px 1fr;
   }
 }
