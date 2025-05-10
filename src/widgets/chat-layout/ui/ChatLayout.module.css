@@ -11,12 +11,17 @@
 
 .chatList {
   grid-area: sidebar;
+  background-color: #212121;
 }
 
 .roomContent {
   grid-area: content;
   display: flex;
   flex-direction: column;
+  background-image: url("../../../shared/assets/images/1676758667_zefirka-club-p-fon-dlya-messendzhera-34.jpg");
+  background-size: cover;
+  width: 100%;
+  filter: drop-shadow(16px 16px 20px black);
 }
 
 .chatContent.mobile {
@@ -38,5 +43,11 @@
   }
   .chatContent {
     grid-template-columns: 300px 1fr;
+  }
+}
+
+@media (width < 640px) {
+  .roomContent {
+    width: 100%;
   }
 }

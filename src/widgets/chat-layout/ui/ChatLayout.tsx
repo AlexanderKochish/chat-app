@@ -47,6 +47,12 @@ const ChatLayout = () => {
     }
   }, [isError, me.id, navigate]);
 
+  useEffect(() => {
+    if (isMobile && !param) {
+      setIsActive(false);
+    }
+  }, [isMobile, param]);
+
   const clazz =
     isMobile && param ? clsx(s.chatContent, s.mobile) : s.chatContent;
   const chatListClass = clsx(s.chatList, !isActive && isMobile && s.hidden);
@@ -58,6 +64,7 @@ const ChatLayout = () => {
         <MainHeader />
         <ChatRoomList findMyChat={findMyChat} />
       </div>
+
       <MessageHeader setIsActive={setIsActive} />
       <div className={roomClass} ref={ref}>
         <MessageList />

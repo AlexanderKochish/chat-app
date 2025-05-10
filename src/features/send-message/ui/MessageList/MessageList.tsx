@@ -6,16 +6,38 @@ import { useSearchParams } from "react-router-dom";
 import { format } from "date-fns";
 import ChatForm from "../ChatForm/ChatForm";
 import { useSearchQuery } from "../../../../shared/hooks/useSearchQuery";
+import { useIntersectionObserver } from "../../../../shared/hooks/useIntersectionObserver";
+import { useEffect } from "react";
 
 const MessageList = () => {
   const { me } = useProfile();
   const [params] = useSearchParams();
   const roomId = params.get("chatId") as string;
-  const messages = useChatMessages(roomId);
+  const {
+    messages,
+    setMessages,
+    fetchMore,
+    hasMore,
+    loading,
+    setCursor,
+    setHasMore,
+  } = useChatMessages(roomId);
   const { param } = useSearchQuery("chatId");
 
+  const { containerRef, loaderRef } = useIntersectionObserver({
+    hasMore,
+    loading,
+    fetchMore,
+  });
+  useEffect(() => {
+    if (!roomId) return;
+    setMessages([]);
+    setCursor(null);
+    setHasMore(true);
+  }, [roomId]);
+
   return (
-    <div className={s.chatMessagge}>
+    <div className={s.chatMessagge} ref={containerRef}>
       {param && <ChatForm />}
       {messages &&
         messages.map((item: Message) => (
@@ -50,6 +72,13 @@ const MessageList = () => {
             </div>
           </div>
         ))}
+      {hasMore || loading ? (
+        <div ref={loaderRef} style={{ height: "10px" }}>
+          Loading...
+        </div>
+      ) : (
+        ""
+      )}
     </div>
   );
 };

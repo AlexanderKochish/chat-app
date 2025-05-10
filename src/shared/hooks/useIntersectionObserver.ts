@@ -26,8 +26,8 @@ export const useIntersectionObserver = ({
       },
       {
         root: containerRef.current,
-        rootMargin: "0px",
-        threshold: 1.0,
+        rootMargin: "10px",
+        threshold: 0.1,
       },
     );
 

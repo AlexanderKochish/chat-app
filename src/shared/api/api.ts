@@ -101,9 +101,16 @@ export const addNewChat = async (userId: string) => {
   }
 };
 
-export const getCurrentChat = async (roomId: string) => {
+export const getCurrentChat = async (roomId: string, cursor?: string) => {
   try {
-    return await api.get(`${CHAT_PARAMS}/${roomId}`);
+    const res = await api.get(`${CHAT_PARAMS}/${roomId}`, {
+      params: cursor ? { cursor } : {},
+    });
+
+    const hasMore = res.data.messages.length === 20;
+    const messages = res.data.messages || [];
+
+    return { messages, hasMore };
   } catch (error) {
     await handlerError(error);
   }
