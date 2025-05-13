@@ -1,4 +1,4 @@
-import axios, { AxiosError } from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import {
   SignInSchemaType,
   SignUpSchemaType,
@@ -11,7 +11,7 @@ import {
   SIGN_UP_PARAMS,
   USERS_PARAMS,
 } from "./constants";
-import { UpdateProfile } from "../types";
+import { MessageImage, UpdateProfile } from "../types";
 
 const api = axios.create({
   baseURL: BASE_API_URL,
@@ -27,6 +27,38 @@ const handlerError = async (error: unknown) => {
   }
   throw new Error("An expected error occurred");
 };
+
+const refreshTokens = async () => {
+  try {
+    await api.post("/auth/refresh");
+  } catch (error) {
+    await handlerError(error);
+  }
+};
+
+api.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const originalRequest = error.config;
+
+    if (
+      error.response?.status === 401 &&
+      !originalRequest._retry &&
+      !originalRequest.url.includes("/auth/refresh")
+    ) {
+      originalRequest._retry = true;
+      try {
+        await refreshTokens();
+        return api(originalRequest);
+      } catch (refreshError) {
+        // navigate('/sign-in')
+        return Promise.reject(refreshError);
+      }
+    }
+
+    return Promise.reject(error);
+  },
+);
 
 // auth endpoints
 export const signUp = async (data: SignUpSchemaType) => {
@@ -119,6 +151,16 @@ export const getCurrentChat = async (roomId: string, cursor?: string) => {
 export const getChatRoom = async () => {
   try {
     return await api.get(`${CHAT_PARAMS}`);
+  } catch (error) {
+    await handlerError(error);
+  }
+};
+
+export const getAllImagesOfChat = async (
+  roomId: string,
+): Promise<AxiosResponse<MessageImage[]> | undefined> => {
+  try {
+    return await api.get(`${CHAT_PARAMS}/${roomId}/images`);
   } catch (error) {
     await handlerError(error);
   }

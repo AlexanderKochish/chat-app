@@ -33,6 +33,7 @@ const MessageHeader = ({ setIsActive }: Props) => {
     queryKey: ["companion", roomId],
     queryFn: () => getCompanion(roomId),
     select: (res) => res?.data,
+    enabled: !!roomId,
   });
   return (
     <div className={s.topNavbar}>

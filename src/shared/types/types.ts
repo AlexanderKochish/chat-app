@@ -52,6 +52,21 @@ export type ChatRoomResponse = {
   name: string | null;
 };
 
+export type MessageImage = {
+  id: string;
+  url: string;
+  messageId: string;
+};
+
+export type AllChatImagesResponse = {
+  createdAt: string;
+  createdById: string;
+  id: string;
+  isGroup: boolean;
+  messages: MessageImage[];
+  name: string | null;
+};
+
 export type UpdateProfile = Partial<Profile>;
 
 export type CreateNewChat = {
