@@ -15,9 +15,8 @@ import ChatList from "../../../../features/add-chat/ui/chat-list/ChatList";
 import DropdownMenuCustom from "../../../../shared/ui/DropdownMenu/DropdownMenu";
 import clsx from "clsx";
 import { useMatchMedia } from "../../../../shared/hooks/useMatchMedia";
-import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
-import { getCompanion } from "../../../../shared/api";
+import { useChatCompanion } from "../../../../shared/api/queries/useChatCompanion";
 
 type Props = {
   setIsActive: (isActive: boolean) => void;
@@ -28,13 +27,8 @@ const MessageHeader = ({ setIsActive }: Props) => {
   const roomId = param.get("chatId") as string;
   const { control, handleSubmit, data } = useSearchUser();
   const { isMobile } = useMatchMedia();
+  const { companion } = useChatCompanion(roomId);
 
-  const { data: companion } = useQuery({
-    queryKey: ["companion", roomId],
-    queryFn: () => getCompanion(roomId),
-    select: (res) => res?.data,
-    enabled: !!roomId,
-  });
   return (
     <div className={s.topNavbar}>
       <div className={s.chosenUser}>

@@ -9,11 +9,6 @@
   overflow-y: hidden;
 }
 
-.chatList {
-  grid-area: sidebar;
-  background-color: #212121;
-}
-
 .roomContent {
   grid-area: content;
   display: flex;
@@ -24,12 +19,17 @@
   filter: drop-shadow(16px 16px 20px black);
 }
 
-.chatContent.mobile {
-  display: block;
+.chatList {
+  grid-area: sidebar;
+  background-color: #212121;
 }
 
 .chatList.hidden {
   display: none;
+}
+
+.chatContent.mobile {
+  display: block;
 }
 
 .roomContent.hidden {

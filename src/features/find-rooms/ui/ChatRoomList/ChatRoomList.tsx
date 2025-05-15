@@ -2,10 +2,9 @@ import { useSearchParams } from "react-router-dom";
 import { useProfile } from "../../../../shared/api/queries/useProfile";
 import { ChatRoomResponse } from "../../../../shared/types";
 import UserCard from "../../../../shared/ui/UserCard/UserCard";
-import { useChatRooms } from "../../model/useChatRooms";
+import { useChatRooms } from "../../model/hooks/useChatRooms";
 import s from "./ChatRoomList.module.css";
-import { getUserOnline } from "../../../../shared/api";
-import { useQuery } from "@tanstack/react-query";
+import { useUserOnline } from "../../model/hooks/useUserOnline";
 
 type Props = {
   findMyChat: (id: string) => void;
@@ -22,12 +21,7 @@ const ChatRoomList = ({ findMyChat }: Props) => {
     .filter((m) => m.userId !== me?.id)
     .map((m) => m.userId) as string[];
 
-  const { data } = useQuery({
-    queryKey: ["online", usersIds],
-    queryFn: () => getUserOnline(usersIds),
-    select: (res) => res?.data,
-    enabled: !!usersIds?.length,
-  });
+  const { data } = useUserOnline(usersIds);
 
   return (
     <div className={s.openedChats}>

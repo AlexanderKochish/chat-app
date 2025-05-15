@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { getChatRoom } from "../../../shared/api";
-import { ChatRoomResponse } from "../../../shared/types";
+import { getChatRoom } from "../../../../shared/api";
+import { ChatRoomResponse } from "../../../../shared/types";
 
 export const useChatRooms = () => {
   const { data: chatRooms, ...rest } = useQuery({
