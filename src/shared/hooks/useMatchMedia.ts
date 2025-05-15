@@ -1,7 +1,7 @@
 import { useState, useLayoutEffect, useCallback, useMemo } from "react";
 
 const queries = [
-  "(max-width: 640px)",
+  "(max-width: 766px)",
   "(min-width: 767px) and (max-width: 1024px)",
 ];
 

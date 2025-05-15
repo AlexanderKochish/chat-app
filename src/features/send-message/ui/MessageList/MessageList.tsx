@@ -21,36 +21,38 @@ const MessageList = () => {
   } = useImageModal(param);
 
   return (
-    <div className={s.chatMessagge} ref={containerRef}>
+    <div className={s.chatWrapper}>
       {param && <ChatForm />}
-      {messages &&
-        messages.map((item: Message) => (
-          <MessageItem
-            item={item}
-            key={item.id}
-            onImageClick={handleOpenModal}
-          />
-        ))}
-      {hasMore || loading ? (
-        <div ref={loaderRef} style={{ height: "10px" }}>
-          Loading...
-        </div>
-      ) : (
-        ""
-      )}
-      <ShowImageModal
-        setIsOpen={setIsOpen}
-        isOpen={isOpen}
-        nav={
-          <ImageViewerToolbar
-            imageIndex={imageIndex}
-            onModalReset={resetModal}
-            roomImages={roomImages || []}
-          />
-        }
-      >
-        <Slider slides={roomImages || []} initialSlide={imageIndex} />
-      </ShowImageModal>
+      <div className={s.chatMessagge} ref={containerRef}>
+        {messages &&
+          messages.map((item: Message) => (
+            <MessageItem
+              item={item}
+              key={item.id}
+              onImageClick={handleOpenModal}
+            />
+          ))}
+        {hasMore || loading ? (
+          <div ref={loaderRef} style={{ height: "10px" }}>
+            Loading...
+          </div>
+        ) : (
+          ""
+        )}
+        <ShowImageModal
+          setIsOpen={setIsOpen}
+          isOpen={isOpen}
+          nav={
+            <ImageViewerToolbar
+              imageIndex={imageIndex}
+              onModalReset={resetModal}
+              roomImages={roomImages || []}
+            />
+          }
+        >
+          <Slider slides={roomImages || []} initialSlide={imageIndex} />
+        </ShowImageModal>
+      </div>
     </div>
   );
 };

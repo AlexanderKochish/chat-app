@@ -4,3 +4,4 @@ export const SIGN_IN_PARAMS = "/auth/sign-in";
 export const PROFILE_PARAMS = "/profile";
 export const USERS_PARAMS = "/users";
 export const CHAT_PARAMS = "/chats";
+export const LOGOUT = "/auth/logout";

@@ -39,7 +39,7 @@
 @media (width < 1024px) {
   .roomContent {
     grid-area: content;
-    width: 95%;
+    width: 100%;
   }
   .chatContent {
     grid-template-columns: 300px 1fr;

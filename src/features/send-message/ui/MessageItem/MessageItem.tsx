@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import { useProfile } from "../../../../shared/api/queries/useProfile";
 import { Message } from "../../../../shared/types";
 import { LinkifiedText } from "../../../../shared/ui/LinkifiedText/LinkifiedText";
@@ -14,7 +15,7 @@ const MessageItem = ({ item, onImageClick }: Props) => {
 
   return (
     <div
-      className={item.ownerId === me?.id ? `${s.message} ${s.own}` : s.message}
+      className={item.ownerId === me?.id ? clsx(s.message, s.own) : s.message}
     >
       <div
         className={

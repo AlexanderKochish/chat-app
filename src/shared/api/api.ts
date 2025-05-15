@@ -6,6 +6,7 @@ import {
 import {
   BASE_API_URL,
   CHAT_PARAMS,
+  LOGOUT,
   PROFILE_PARAMS,
   SIGN_IN_PARAMS,
   SIGN_UP_PARAMS,
@@ -72,6 +73,14 @@ export const signUp = async (data: SignUpSchemaType) => {
 export const signIn = async (data: SignInSchemaType) => {
   try {
     return await api.post(SIGN_IN_PARAMS, data);
+  } catch (error) {
+    await handlerError(error);
+  }
+};
+
+export const logout = async () => {
+  try {
+    return await api.post(`${LOGOUT}`);
   } catch (error) {
     await handlerError(error);
   }
