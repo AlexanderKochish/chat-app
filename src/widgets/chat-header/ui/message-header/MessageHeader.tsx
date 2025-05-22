@@ -17,9 +17,10 @@ import clsx from "clsx";
 import { useMatchMedia } from "../../../../shared/hooks/useMatchMedia";
 import { useSearchParams } from "react-router-dom";
 import { useChatCompanion } from "../../../../shared/api/queries/useChatCompanion";
+import { Dispatch } from "react";
 
 type Props = {
-  setIsActive: (isActive: boolean) => void;
+  setIsActive: Dispatch<React.SetStateAction<boolean>>;
 };
 
 const MessageHeader = ({ setIsActive }: Props) => {
@@ -33,7 +34,10 @@ const MessageHeader = ({ setIsActive }: Props) => {
     <div className={s.topNavbar}>
       <div className={s.chosenUser}>
         {isMobile && (
-          <button className={s.btnWrapper} onClick={() => setIsActive(true)}>
+          <button
+            className={s.btnWrapper}
+            onClick={() => setIsActive((isActive: boolean) => !isActive)}
+          >
             <ArrowLeftIcon width="25" height="25" />
           </button>
         )}

@@ -47,6 +47,9 @@
 }
 
 @media (width < 640px) {
+  .chatContent {
+    display: block;
+  }
   .roomContent {
     width: 100%;
   }

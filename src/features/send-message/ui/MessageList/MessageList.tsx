@@ -33,7 +33,10 @@ const MessageList = () => {
             />
           ))}
         {hasMore || loading ? (
-          <div ref={loaderRef} style={{ height: "10px" }}>
+          <div
+            ref={loaderRef}
+            className={!messages.length ? s.notMore : s.hasMore}
+          >
             Loading...
           </div>
         ) : (

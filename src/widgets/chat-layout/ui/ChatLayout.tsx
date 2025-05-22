@@ -19,6 +19,12 @@ const ChatLayout = () => {
   const [isActive, setIsActive] = useState(false);
   useRedirectIfUnauthorized(!!me?.id, isError);
 
+  useEffect(() => {
+    if (isMobile) {
+      setIsActive(!!param);
+    }
+  }, [isMobile, param]);
+
   const findMyChat = (id: string) => {
     setSearchParams(id);
     setIsActive((prev) => !prev);
@@ -30,16 +36,9 @@ const ChatLayout = () => {
     }
   }, [param, joinRoom]);
 
-  useEffect(() => {
-    if (isMobile && !param) {
-      setIsActive(false);
-    }
-  }, [isMobile, param]);
-
-  const clazz =
-    isMobile && param ? clsx(s.chatContent, s.mobile) : s.chatContent;
-  const chatListClass = clsx(s.chatList, !isActive && isMobile && s.hidden);
-  const roomClass = clsx(s.roomContent, isActive && isMobile && s.hidden);
+  const clazz = clsx(s.chatContent, isMobile && s.mobile);
+  const chatListClass = clsx(s.chatList, isMobile && isActive && s.hidden);
+  const roomClass = clsx(s.roomContent, isMobile && !isActive && s.hidden);
 
   return (
     <div className={clazz}>
