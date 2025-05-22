@@ -50,3 +50,21 @@
 .profileBtn.delete {
   color: #d93733;
 }
+
+.logoutContent {
+  display: flex;
+  flex-direction: column;
+  min-height: 60px;
+  row-gap: 20px;
+}
+
+.logoutBtns {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  column-gap: 20px;
+}
+
+.btnLogout {
+  background-color: #d93733;
+}

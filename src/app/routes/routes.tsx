@@ -5,18 +5,10 @@ const SignInPage = lazy(() => import("../../pages/auth/SignInPage"));
 const Chat = lazy(() => import("../../pages/chats/Chat"));
 import Spinner from "../../shared/ui/Spinner/Spinner";
 import { SocketWrapper } from "../../shared/socket/SocketWrapper";
+import ProtectedRoute from "./ProtectedRoute";
 
 export const router = createBrowserRouter([
-  {
-    path: "/",
-    element: (
-      <Suspense fallback={<Spinner />}>
-        <SocketWrapper>
-          <Chat />
-        </SocketWrapper>
-      </Suspense>
-    ),
-  },
+  
   {
     path: "/sign-up",
     element: (
@@ -30,6 +22,18 @@ export const router = createBrowserRouter([
     element: (
       <Suspense fallback={<Spinner />}>
         <SignInPage />
+      </Suspense>
+    ),
+  },
+  {
+    path: "/",
+    element: (
+      <Suspense fallback={<Spinner />}>
+        <SocketWrapper>
+          <ProtectedRoute>
+          <Chat />
+          </ProtectedRoute>
+        </SocketWrapper>
       </Suspense>
     ),
   },

@@ -1,49 +1,12 @@
-import { useForm } from "react-hook-form";
 import { ChatLogo } from "../../../../shared/assets/icons";
 import s from "./SignUp.module.css";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Input from "../../../../shared/ui/Input/Input";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { signUpSchema, SignUpSchemaType } from "../../model/zod/auth.schema";
-import { useMutation } from "@tanstack/react-query";
-import toast from "react-hot-toast";
 import Spinner from "../../../../shared/ui/Spinner/Spinner";
-import { signUp } from "../../../../shared/api";
+import { useSignUp } from "../../model/hooks/useSignUp";
 
 const SignUp = () => {
-  const navigate = useNavigate();
-  const { handleSubmit, control, reset } = useForm<SignUpSchemaType>({
-    defaultValues: {
-      email: "",
-      name: "",
-      password: "",
-      confirmPassword: "",
-    },
-    mode: "onSubmit",
-    reValidateMode: "onSubmit",
-    resolver: zodResolver(signUpSchema),
-  });
-
-  const { mutate, isPending } = useMutation({
-    mutationFn: (data: SignUpSchemaType) => onSubmit(data),
-  });
-
-  const onSubmit = async (data: SignUpSchemaType) => {
-    try {
-      const response = await signUp(data);
-
-      if (response?.status === 201) {
-        toast.success("Registration is Success");
-      }
-      reset();
-      navigate("/", { replace: true });
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        toast.error("Something went wrong");
-        throw new Error("Something went wrong");
-      }
-    }
-  };
+ const {handleSubmit, control, isPending, mutate} = useSignUp()
 
   if (isPending) {
     return <Spinner />;

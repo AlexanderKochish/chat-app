@@ -1,43 +1,17 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import s from "./SignIn.module.css";
 import { ChatLogo } from "../../../../shared/assets/icons";
 import Input from "../../../../shared/ui/Input/Input";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { signInSchema, SignInSchemaType } from "../../model/zod/auth.schema";
-import { useMutation } from "@tanstack/react-query";
-import toast from "react-hot-toast";
-import { signIn } from "../../../../shared/api";
+import { useSignIn } from "../../model/hooks/useSignIn";
+import Spinner from "../../../../shared/ui/Spinner/Spinner";
 
 const SignIn = () => {
-  const navigate = useNavigate();
-  const { handleSubmit, control, reset } = useForm<SignInSchemaType>({
-    defaultValues: {
-      email: "",
-      password: "",
-    },
-    mode: "onSubmit",
-    reValidateMode: "onSubmit",
-    resolver: zodResolver(signInSchema),
-  });
-  const { mutate } = useMutation({
-    mutationFn: (data: SignInSchemaType) => onSubmit(data),
-  });
-  const onSubmit = async (data: SignInSchemaType) => {
-    try {
-      const response = await signIn(data);
-      if (response?.status === 201) {
-        toast.success("Logged is successful");
-      }
-      reset();
-      navigate("/", { replace: true });
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        toast.error("Something went wrong");
-        throw new Error("Something went wrong");
-      }
-    }
-  };
+  const { handleSubmit, control, mutate, isPending } = useSignIn()
+
+   if (isPending) {
+    return <Spinner />;
+  }
+  
   return (
     <section className={s.signUp}>
       <div className={s.signUpWrapper}>
