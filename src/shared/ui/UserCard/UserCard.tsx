@@ -2,11 +2,11 @@ import { DrawingIcon, PersonIcon } from "../../assets/icons";
 import s from "./UserCard.module.css";
 
 type Props = {
-  avatar: string | null;
+  avatar: string | null | undefined;
   name: string;
-  lastMessage: string;
+  lastMessage?: string;
   active?: boolean;
-  isOnline: boolean;
+  isOnline?: boolean;
 };
 
 const UserCard = ({ avatar, lastMessage, name, active, isOnline }: Props) => {

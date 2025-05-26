@@ -7,7 +7,7 @@ import { signUp } from "../../../../shared/api";
 import toast from "react-hot-toast";
 
 export const useSignUp = () => {
-   const navigate = useNavigate();
+  const navigate = useNavigate();
   const { handleSubmit, control, reset } = useForm<SignUpSchemaType>({
     defaultValues: {
       email: "",
@@ -41,5 +41,5 @@ export const useSignUp = () => {
     }
   };
 
-  return { ...rest, handleSubmit, control, reset}
-}
+  return { ...rest, handleSubmit, control, reset };
+};

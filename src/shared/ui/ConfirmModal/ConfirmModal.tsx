@@ -1,7 +1,10 @@
 import { ReactNode } from "react";
 import { Dialog } from "radix-ui";
-import s from "./Modal.module.css";
+import s from "./ConfirmModal.module.css";
 import { CloseIcon } from "../../assets/icons";
+import Button from "../Button/Button";
+import { UseMutateFunction } from "@tanstack/react-query";
+import { AxiosResponse } from "axios";
 
 type Props = {
   children?: ReactNode;
@@ -9,14 +12,21 @@ type Props = {
   title?: string;
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
+  mutate: UseMutateFunction<
+    AxiosResponse<any> | undefined,
+    Error,
+    void,
+    unknown
+  >;
 };
 
-const DialogModal = ({
+const ConfirmModal = ({
   isOpen,
   setIsOpen,
   children,
   position = "50",
   title,
+  mutate,
 }: Props) => (
   <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
     <Dialog.Portal>
@@ -24,7 +34,17 @@ const DialogModal = ({
       <Dialog.Content style={{ top: `${position}%` }} className={s.content}>
         <Dialog.Title className={s.title}>{title}</Dialog.Title>
         <Dialog.Description className={s.description}></Dialog.Description>
-        {children}
+        <div className={s.logoutContent}>
+          <span>{children}</span>
+
+          <div className={s.logoutBtns}>
+            <Button onClick={() => setIsOpen(false)}>No</Button>
+            <Button color={"danger"} size="large" onClick={() => mutate()}>
+              Yes
+            </Button>
+          </div>
+        </div>
+
         <Dialog.Close asChild>
           <button className={s.iconButton} aria-label="Close">
             <CloseIcon />
@@ -35,4 +55,4 @@ const DialogModal = ({
   </Dialog.Root>
 );
 
-export default DialogModal;
+export default ConfirmModal;

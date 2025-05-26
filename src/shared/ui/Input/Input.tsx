@@ -7,9 +7,11 @@ interface MyInputProps<T extends FieldValues> {
   control: Control<T>;
   name: Path<T>;
   icon?: boolean;
+  defaultValue?: string;
 }
 
 const Input = <T extends FieldValues>({
+  defaultValue,
   name,
   control,
   icon = false,
@@ -31,6 +33,7 @@ const Input = <T extends FieldValues>({
           className={s.input}
           id={name}
           type={!icon ? "text" : changeInputType}
+          defaultValue={defaultValue}
         />
         {icon && (
           <button

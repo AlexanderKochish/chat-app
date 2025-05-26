@@ -13,22 +13,27 @@ import DialogModal from "../../../../shared/ui/Modal/Modal";
 import Input from "../../../../shared/ui/Input/Input";
 import ChatList from "../../../../features/add-chat/ui/chat-list/ChatList";
 import DropdownMenuCustom from "../../../../shared/ui/DropdownMenu/DropdownMenu";
-import clsx from "clsx";
 import { useMatchMedia } from "../../../../shared/hooks/useMatchMedia";
 import { useSearchParams } from "react-router-dom";
 import { useChatCompanion } from "../../../../shared/api/queries/useChatCompanion";
-import { Dispatch } from "react";
+import { Dispatch, useState } from "react";
+import ConfirmModal from "../../../../shared/ui/ConfirmModal/ConfirmModal";
+import { useLogout } from "../../../../features/auth/model/hooks/useLogout";
+import DropDownItem from "../../../../shared/ui/DropdownItem/DropDownItem";
 
 type Props = {
   setIsActive: Dispatch<React.SetStateAction<boolean>>;
 };
 
 const MessageHeader = ({ setIsActive }: Props) => {
+  const [isSearch, setIsSearch] = useState(false);
+  const [isRemoveChat, setIsRemoveChat] = useState(false);
   const [param] = useSearchParams();
   const roomId = param.get("chatId") as string;
   const { control, handleSubmit, data } = useSearchUser();
   const { isMobile } = useMatchMedia();
   const { companion } = useChatCompanion(roomId);
+  const { mutate } = useLogout();
 
   return (
     <div className={s.topNavbar}>
@@ -55,13 +60,10 @@ const MessageHeader = ({ setIsActive }: Props) => {
       </div>
       <div className={s.chatNav}>
         <DialogModal
+          isOpen={isSearch}
+          setIsOpen={setIsSearch}
           title="Search"
           position="25"
-          trigger={
-            <button className={s.btnWrapper}>
-              <GlassIcon width="25" height="25" />
-            </button>
-          }
         >
           <>
             <form onSubmit={handleSubmit((data) => data)}>
@@ -70,6 +72,9 @@ const MessageHeader = ({ setIsActive }: Props) => {
             <ChatList chatList={data} />
           </>
         </DialogModal>
+        <button className={s.btnWrapper} onClick={() => setIsSearch(true)}>
+          <GlassIcon width="25" height="25" />
+        </button>
         <DropdownMenuCustom
           trigger={
             <button className={s.btnWrapper}>
@@ -81,20 +86,27 @@ const MessageHeader = ({ setIsActive }: Props) => {
             </button>
           }
         >
-          <button className={s.profileBtn}>
-            <PencilIcon width="15" height="15" />
-            <span>Edit</span>
-          </button>
-          <button className={s.profileBtn}>
-            <HandIcon />
-            <span>Block user</span>
-          </button>
-          <button className={clsx(s.profileBtn, s.delete)}>
-            <BinIcon width="20" height="20" />
-            <span>Delete chat</span>
-          </button>
+          <DropDownItem
+            icon={<PencilIcon width="15" height="15" />}
+            text="Edit"
+          />
+          <DropDownItem icon={<HandIcon />} text="Block user" />
+          <DropDownItem
+            icon={<BinIcon width="20" height="20" />}
+            className="danger"
+            text="Delete chat"
+            onClick={() => setIsRemoveChat(true)}
+          />
         </DropdownMenuCustom>
       </div>
+      <ConfirmModal
+        mutate={mutate}
+        isOpen={isRemoveChat}
+        setIsOpen={setIsRemoveChat}
+        position="50"
+      >
+        Are you sure you want to delete the chat?
+      </ConfirmModal>
     </div>
   );
 };

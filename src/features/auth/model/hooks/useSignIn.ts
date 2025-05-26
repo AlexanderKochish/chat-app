@@ -6,9 +6,8 @@ import toast from "react-hot-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
 
-
 export const useSignIn = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
   const { handleSubmit, control, reset } = useForm<SignInSchemaType>({
     defaultValues: {
       email: "",
@@ -37,5 +36,5 @@ export const useSignIn = () => {
     }
   };
 
-  return {handleSubmit, control, ...rest}
-}
+  return { handleSubmit, control, ...rest };
+};

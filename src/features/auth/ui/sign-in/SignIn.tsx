@@ -6,12 +6,12 @@ import { useSignIn } from "../../model/hooks/useSignIn";
 import Spinner from "../../../../shared/ui/Spinner/Spinner";
 
 const SignIn = () => {
-  const { handleSubmit, control, mutate, isPending } = useSignIn()
+  const { handleSubmit, control, mutate, isPending } = useSignIn();
 
-   if (isPending) {
+  if (isPending) {
     return <Spinner />;
   }
-  
+
   return (
     <section className={s.signUp}>
       <div className={s.signUpWrapper}>

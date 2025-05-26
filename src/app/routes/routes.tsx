@@ -8,7 +8,6 @@ import { SocketWrapper } from "../../shared/socket/SocketWrapper";
 import ProtectedRoute from "./ProtectedRoute";
 
 export const router = createBrowserRouter([
-  
   {
     path: "/sign-up",
     element: (
@@ -31,7 +30,7 @@ export const router = createBrowserRouter([
       <Suspense fallback={<Spinner />}>
         <SocketWrapper>
           <ProtectedRoute>
-          <Chat />
+            <Chat />
           </ProtectedRoute>
         </SocketWrapper>
       </Suspense>

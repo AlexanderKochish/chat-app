@@ -6,7 +6,7 @@ import Spinner from "../../../../shared/ui/Spinner/Spinner";
 import { useSignUp } from "../../model/hooks/useSignUp";
 
 const SignUp = () => {
- const {handleSubmit, control, isPending, mutate} = useSignUp()
+  const { handleSubmit, control, isPending, mutate } = useSignUp();
 
   if (isPending) {
     return <Spinner />;

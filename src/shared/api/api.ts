@@ -182,3 +182,31 @@ export const getCompanion = async (roomId: string) => {
     await handlerError(error);
   }
 };
+
+export const updateMessage = async (
+  roomId: string,
+  msgId: string,
+  data: { text: string },
+) => {
+  try {
+    return await api.patch(`${CHAT_PARAMS}/${roomId}/message`, data, {
+      params: {
+        id: msgId,
+      },
+    });
+  } catch (error) {
+    await handlerError(error);
+  }
+};
+
+export const removeMessage = async (roomId: string, msgId: string) => {
+  try {
+    return await api.delete(`${CHAT_PARAMS}/${roomId}/message`, {
+      params: {
+        id: msgId,
+      },
+    });
+  } catch (error) {
+    await handlerError(error);
+  }
+};

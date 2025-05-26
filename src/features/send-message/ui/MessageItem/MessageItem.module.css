@@ -1,12 +1,19 @@
 .message {
   display: flex;
   justify-content: flex-start;
+  position: relative;
 }
 
 .message.own {
   display: flex;
   justify-content: flex-end;
   background-color: inherit;
+  position: relative;
+}
+
+.message.editMessage {
+  background-color: rgba(0, 0, 0, 0.4);
+  position: relative;
 }
 
 .messageWrapper {
@@ -46,4 +53,24 @@
 
 .createdAt {
   font-size: 12px;
+}
+
+.edit {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.editBottom {
+  width: 100px;
+  height: 100px;
+  display: flex;
+  align-self: flex-end;
+  margin-top: 20px;
+}
+
+.editForm {
+  display: flex;
+  flex-direction: column;
+  row-gap: 5px;
 }
