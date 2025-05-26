@@ -10,8 +10,24 @@ import { useChatFormLogic } from "../../model/hooks/useChatFormLogic";
 import EmojiPicker from "emoji-picker-react";
 import PopoverCustom from "../../../../shared/ui/Popover/PopoverCustom";
 import { EmojiClickData, Theme } from "emoji-picker-react";
+import { useEditMessage } from "../../model/store/editMessage.store";
+import {
+  editMessage,
+  editMessageSchemaType,
+} from "../../model/zod/editMessage.schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
+import { useSendMessage } from "../../model/hooks/useSendMessage";
+import { useProfile } from "../../../../shared/api/queries/useProfile";
 
 const ChatForm = () => {
+  const { me } = useProfile();
+  const [searchParam] = useSearchParams();
+  const roomId = searchParam.get("chatId") as string;
+
+  const { updateMessage } = useSendMessage();
   const {
     formProps: { handleSubmit, register, textAreaRef, setValue, watch },
     cropProps: {
@@ -26,6 +42,23 @@ const ChatForm = () => {
     },
     fileInputProps: { handleFileChange },
   } = useChatFormLogic();
+  const { editMessageId, editText, clearEditState } = useEditMessage();
+  const {
+    register: editRegister,
+    setValue: setEditValue,
+    handleSubmit: handleSubmitEdit,
+  } = useForm<editMessageSchemaType>({
+    defaultValues: {
+      editMessage: "",
+    },
+    resolver: zodResolver(editMessage),
+  });
+
+  useEffect(() => {
+    if (editMessageId && editText) {
+      setEditValue("editMessage", editText);
+    }
+  }, [editMessageId, editText, setEditValue]);
 
   const text = watch("text");
   const handleEmojiClick = (data: EmojiClickData) => {
@@ -33,12 +66,24 @@ const ChatForm = () => {
     setValue("text", newValue);
   };
 
+  const onSubmit = async (data: { editMessage: string }) => {
+    if (editMessageId && me?.id) {
+      await updateMessage({
+        roomId,
+        msgId: editMessageId,
+        ownerId: me?.id,
+        text: data.editMessage,
+      });
+      clearEditState();
+    }
+  };
+
   return (
     <div className={s.formWrapper}>
       <form
         id="sendMessageForm"
         className={s.formMessage}
-        onSubmit={handleSubmit}
+        onSubmit={editMessageId ? handleSubmitEdit(onSubmit) : handleSubmit}
       >
         <PopoverCustom trigger={<EmojiIcon width="30" height="30" />}>
           <EmojiPicker
@@ -48,16 +93,28 @@ const ChatForm = () => {
             onEmojiClick={handleEmojiClick}
           />
         </PopoverCustom>
-        <textarea
-          className={s.textArea}
-          {...register("text")}
-          name="text"
-          ref={(e) => {
-            register("text").ref(e);
-            textAreaRef.current = e;
-          }}
-          placeholder="Message"
-        />
+        {!editMessageId ? (
+          <textarea
+            className={s.textArea}
+            {...register("text")}
+            name="text"
+            ref={(e) => {
+              register("text").ref(e);
+              textAreaRef.current = e;
+            }}
+            placeholder="Message"
+          />
+        ) : (
+          <textarea
+            className={s.textArea}
+            {...editRegister("editMessage")}
+            name="editMessage"
+            ref={(e) => {
+              editRegister("editMessage").ref(e);
+              textAreaRef.current = e;
+            }}
+          />
+        )}
         <CropFileModal setIsOpen={setIsOpen} isOpen={isOpen} position="50">
           {!!imgSrc && (
             <ReactCrop

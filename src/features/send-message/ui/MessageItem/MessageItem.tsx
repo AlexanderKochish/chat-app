@@ -5,18 +5,10 @@ import { LinkifiedText } from "../../../../shared/ui/LinkifiedText/LinkifiedText
 import s from "./MessageItem.module.css";
 import { format } from "date-fns";
 import { MouseEvent, useState } from "react";
-// import DialogModal from "../../../../shared/ui/Modal/Modal";
-// import Button from "../../../../shared/ui/Button/Button";
-// import Input from "../../../../shared/ui/Input/Input";
-import { useForm } from "react-hook-form";
-import {
-  editMessage,
-  editMessageSchemaType,
-} from "../../model/zod/editMessage.schema";
-import { zodResolver } from "@hookform/resolvers/zod";
 import DropDownItem from "../../../../shared/ui/DropdownItem/DropDownItem";
-import { BinIcon, PencilIcon } from "../../../../shared/assets/icons";
-import { MessageDropdown } from "../../../../shared/ui/MessageDropDown/MessageDropDown";
+import { BinIcon, CopyIcon, PencilIcon } from "../../../../shared/assets/icons";
+import { useEditMessage } from "../../model/store/editMessage.store";
+import { MessageDropdown } from "../../../../shared/ui/MessageDropDown/MessageDropdown";
 
 type Props = {
   item: Message;
@@ -24,14 +16,10 @@ type Props = {
 };
 
 const MessageItem = ({ item, onImageClick }: Props) => {
-  const { register, handleSubmit, setValue, getValues } =
-    useForm<editMessageSchemaType>({
-      defaultValues: {
-        editMessage: "",
-      },
-      resolver: zodResolver(editMessage),
-    });
-  const [isOpen, setIsOpen] = useState(false);
+  const { openMessageId, setOpenMessageId, setEditMessageId, setEditText } =
+    useEditMessage();
+  const isOpen = openMessageId === item.id;
+
   const [dropdownPosition, setDropdownPosition] = useState<{
     x: number;
     y: number;
@@ -41,8 +29,6 @@ const MessageItem = ({ item, onImageClick }: Props) => {
   const handleEditMessage = (
     e: MouseEvent<HTMLDivElement>,
     messageId: string,
-    owherId: string,
-    text: string,
   ) => {
     e.preventDefault();
     const container = e.currentTarget.getBoundingClientRect();
@@ -50,7 +36,7 @@ const MessageItem = ({ item, onImageClick }: Props) => {
     const clickY = e.clientY - container.top;
 
     const menuWidth = 160;
-    const menuHeight = 80;
+    const menuHeight = 120;
     const maxX = container.width - menuWidth;
     const maxY = clickY - menuHeight;
 
@@ -59,18 +45,12 @@ const MessageItem = ({ item, onImageClick }: Props) => {
       y: Math.min(clickY, maxY),
     });
 
-    setIsOpen(true);
-  };
-
-  const onSubmit = async (data) => {
-    console.log(data);
+    setOpenMessageId(messageId);
   };
 
   return (
     <div
-      onContextMenu={(e) =>
-        handleEditMessage(e, item.id, item.ownerId, item.text)
-      }
+      onContextMenu={(e) => handleEditMessage(e, item.id)}
       className={clsx(
         s.message,
         item.ownerId === me?.id ? s.own : "",
@@ -104,16 +84,21 @@ const MessageItem = ({ item, onImageClick }: Props) => {
           {format(new Date(item.createdAt), "hh:mm a")}
         </span>
       </div>
-
       <MessageDropdown
         isOpen={isOpen}
         position={dropdownPosition}
-        onClose={() => setIsOpen(false)}
+        onClose={() => setOpenMessageId(null)}
       >
         <DropDownItem
           icon={<PencilIcon width="15" height="15" />}
           text="Edit"
+          onClick={() => {
+            setEditMessageId(openMessageId);
+            setEditText(item.text);
+            setOpenMessageId(null);
+          }}
         />
+        <DropDownItem icon={<CopyIcon />} text="Copy" />
         <DropDownItem
           icon={<BinIcon width="20" height="20" />}
           className="danger"
@@ -126,16 +111,3 @@ const MessageItem = ({ item, onImageClick }: Props) => {
 };
 
 export default MessageItem;
-
-{
-  /* <DialogModal position="50" isOpen={isOpen} setIsOpen={setIsOpen} title="Edit Message">
-        <div className={s.edit}>
-          <form onSubmit={handleSubmit(onSubmit)} className={s.editForm}>
-            <textarea id="editMessage" {...register('editMessage')}  defaultValue={value}/>
-          </form>
-          <div className={s.editBottom}>
-          <Button form="editMessage">Edit</Button>
-          </div>
-          </div>
-      </DialogModal> */
-}

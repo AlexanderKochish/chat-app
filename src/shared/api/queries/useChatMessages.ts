@@ -61,6 +61,24 @@ export const useChatMessages = (roomId: string) => {
     };
   }, [roomId, socket]);
 
+  useEffect(() => {
+    if (!socket) return;
+
+    const handleUpdateMessage = (message: Message) => {
+      if (message.roomId === roomId) {
+        setMessages((prevMessages: Message[]) =>
+          prevMessages.map((msg) => (msg.id === message.id ? message : msg)),
+        );
+      }
+    };
+
+    socket.on("updateMessage", handleUpdateMessage);
+
+    return () => {
+      socket.off("updateMessage", handleUpdateMessage);
+    };
+  }, [roomId, socket]);
+
   return {
     messages,
     setMessages,

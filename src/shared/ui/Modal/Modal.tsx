@@ -21,7 +21,11 @@ const DialogModal = ({
   <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
     <Dialog.Portal>
       <Dialog.Overlay className={s.overlay} onClick={() => setIsOpen(false)} />
-      <Dialog.Content style={{ top: `${position}%` }} className={s.content}>
+      <Dialog.Content
+        onClick={(e) => e.stopPropagation()}
+        style={{ top: `${position}%` }}
+        className={s.content}
+      >
         <Dialog.Title className={s.title}>{title}</Dialog.Title>
         <Dialog.Description className={s.description}></Dialog.Description>
         {children}
