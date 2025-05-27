@@ -9,6 +9,7 @@ import DropDownItem from "../../../../shared/ui/DropdownItem/DropDownItem";
 import { BinIcon, CopyIcon, PencilIcon } from "../../../../shared/assets/icons";
 import { useEditMessage } from "../../model/store/editMessage.store";
 import { MessageDropdown } from "../../../../shared/ui/MessageDropDown/MessageDropdown";
+import { useSendMessage } from "../../model/hooks/useSendMessage";
 
 type Props = {
   item: Message;
@@ -16,6 +17,7 @@ type Props = {
 };
 
 const MessageItem = ({ item, onImageClick }: Props) => {
+  const { removeMessage } = useSendMessage();
   const { openMessageId, setOpenMessageId, setEditMessageId, setEditText } =
     useEditMessage();
   const isOpen = openMessageId === item.id;
@@ -103,7 +105,13 @@ const MessageItem = ({ item, onImageClick }: Props) => {
           icon={<BinIcon width="20" height="20" />}
           className="danger"
           text="Delete"
-          //  onClick={() => setIsRemoveChat(true)}
+          onClick={() =>
+            removeMessage({
+              roomId: item.roomId,
+              msgId: item.id,
+              ownerId: item.ownerId,
+            })
+          }
         />
       </MessageDropdown>
     </div>

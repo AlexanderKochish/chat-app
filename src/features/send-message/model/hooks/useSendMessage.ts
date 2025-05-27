@@ -36,5 +36,13 @@ export const useSendMessage = () => {
     socket?.emit("updateMessage", updatedMessage);
   };
 
-  return { sendMessage, updateMessage };
+  const removeMessage = async (data: {
+    roomId: string;
+    msgId: string;
+    ownerId: string;
+  }) => {
+    socket?.emit("removeMessage", data);
+  };
+
+  return { sendMessage, updateMessage, removeMessage };
 };

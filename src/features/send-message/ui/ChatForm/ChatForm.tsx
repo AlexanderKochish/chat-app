@@ -47,6 +47,7 @@ const ChatForm = () => {
     register: editRegister,
     setValue: setEditValue,
     handleSubmit: handleSubmitEdit,
+    reset: resetEdit,
   } = useForm<editMessageSchemaType>({
     defaultValues: {
       editMessage: "",
@@ -74,6 +75,7 @@ const ChatForm = () => {
         ownerId: me?.id,
         text: data.editMessage,
       });
+      resetEdit();
       clearEditState();
     }
   };

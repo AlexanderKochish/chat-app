@@ -79,6 +79,24 @@ export const useChatMessages = (roomId: string) => {
     };
   }, [roomId, socket]);
 
+  useEffect(() => {
+    if (!socket) return;
+
+    const handleRemoveMessage = (message: Message) => {
+      if (message.roomId === roomId) {
+        setMessages((prevMessages: Message[]) =>
+          prevMessages.filter((msg) => msg.id !== message.id),
+        );
+      }
+    };
+
+    socket.on("removeMessage", handleRemoveMessage);
+
+    return () => {
+      socket.off("removeMessage", handleRemoveMessage);
+    };
+  }, [roomId, socket]);
+
   return {
     messages,
     setMessages,
