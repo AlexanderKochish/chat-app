@@ -1,41 +1,18 @@
-import { useEffect, useState } from "react";
-import { useSocket } from "../../socket";
+import { useEffect } from "react";
 import { getCurrentChat } from "../api";
-import { Message } from "../../types";
+import { useChatMessagesStore } from "../../../features/send-message/model/store/chatMessage.store";
+import { useMessageSocketEvents } from "../../../features/send-message/model/hooks/useMessageSocketEvents";
 
 export const useChatMessages = (roomId: string) => {
-  const socket = useSocket();
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [hasMore, setHasMore] = useState(true);
-  const [cursor, setCursor] = useState<string | null>(null);
+  const {
+    fetchMoreMessages,
+    addMessage,
+    removeMessage,
+    setMessages,
+    updateMessage,
+  } = useChatMessagesStore();
 
-  const fetchMore = async () => {
-    if (loading || !roomId || !hasMore) return;
-
-    setLoading(true);
-    try {
-      const res = await getCurrentChat(roomId, cursor ?? undefined);
-      const newMessages = res?.messages || [];
-
-      setMessages((prev) => {
-        const existingIds = new Set(prev.map((msg) => msg.id));
-        const newUnique = newMessages.filter(
-          (msg: Message) => !existingIds.has(msg.id),
-        );
-        return [...prev, ...newUnique];
-      });
-
-      const last = newMessages[newMessages.length - 1];
-      setCursor(last?.id ?? null);
-
-      setHasMore(Boolean(res?.hasMore));
-    } catch (err) {
-      console.error("Error fetching messages", err);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const fetchMore = async () => await fetchMoreMessages(roomId);
 
   useEffect(() => {
     if (roomId) {
@@ -43,67 +20,14 @@ export const useChatMessages = (roomId: string) => {
         setMessages(res?.messages);
       });
     }
-  }, [roomId]);
+  }, [roomId, setMessages]);
 
-  useEffect(() => {
-    if (!socket) return;
-
-    const handleNewMessage = (message: Message) => {
-      if (message.roomId === roomId) {
-        setMessages((prevMessages: Message[]) => [message, ...prevMessages]);
-      }
-    };
-
-    socket.on("newMessage", handleNewMessage);
-
-    return () => {
-      socket.off("newMessage", handleNewMessage);
-    };
-  }, [roomId, socket]);
-
-  useEffect(() => {
-    if (!socket) return;
-
-    const handleUpdateMessage = (message: Message) => {
-      if (message.roomId === roomId) {
-        setMessages((prevMessages: Message[]) =>
-          prevMessages.map((msg) => (msg.id === message.id ? message : msg)),
-        );
-      }
-    };
-
-    socket.on("updateMessage", handleUpdateMessage);
-
-    return () => {
-      socket.off("updateMessage", handleUpdateMessage);
-    };
-  }, [roomId, socket]);
-
-  useEffect(() => {
-    if (!socket) return;
-
-    const handleRemoveMessage = (message: Message) => {
-      if (message.roomId === roomId) {
-        setMessages((prevMessages: Message[]) =>
-          prevMessages.filter((msg) => msg.id !== message.id),
-        );
-      }
-    };
-
-    socket.on("removeMessage", handleRemoveMessage);
-
-    return () => {
-      socket.off("removeMessage", handleRemoveMessage);
-    };
-  }, [roomId, socket]);
+  useMessageSocketEvents(roomId, "newMessage", addMessage);
+  useMessageSocketEvents(roomId, "updateMessage", updateMessage);
+  useMessageSocketEvents(roomId, "removeMessage", removeMessage);
 
   return {
-    messages,
     setMessages,
     fetchMore,
-    loading,
-    hasMore,
-    setCursor,
-    setHasMore,
   };
 };

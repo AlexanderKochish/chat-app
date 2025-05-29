@@ -1,6 +1,6 @@
 import s from "./MessageList.module.css";
 import { Message } from "../../../../shared/types";
-import ChatForm from "../ChatForm/ChatForm";
+import ChatForm from "../../../chat-form/ui/ChatForm/ChatForm";
 import ShowImageModal from "../../../../shared/ui/ShowImagePhoto/ShowImageModal";
 import { Slider } from "../../../../shared/ui/Slider/Slider";
 import ImageViewerToolbar from "../../../../shared/ui/ImageViewerToolbar/ImageViewerToolbar";
@@ -9,11 +9,12 @@ import { useMessageList } from "../../model/hooks/useMessageList";
 import { useImageModal } from "../../model/hooks/useImageModal";
 import { ArrowDown } from "../../../../shared/assets/icons";
 import { useCallback, useEffect, useState } from "react";
+import { useChatMessagesStore } from "../../model/store/chatMessage.store";
 
 const MessageList = () => {
   const [isVisible, setIsVisible] = useState(false);
-  const { param, containerRef, messages, hasMore, loading, loaderRef } =
-    useMessageList();
+  const { param, containerRef, loaderRef } = useMessageList();
+  const { messages, hasMore, loading } = useChatMessagesStore();
   const {
     isOpen,
     setIsOpen,

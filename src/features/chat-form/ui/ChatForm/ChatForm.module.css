@@ -19,6 +19,15 @@
   padding: 5px;
 }
 
+.textArea {
+  width: 100%;
+  resize: none;
+  overflow: hidden;
+  background-color: inherit;
+  transition: height 0.2s ease;
+  outline: none;
+  border: none;
+}
 .sendBtn {
   background-color: rgba(55, 147, 204, 0.955);
   border: none;
@@ -32,16 +41,6 @@
   &:hover {
     background-color: rgba(68, 133, 173, 0.955);
   }
-}
-
-.textArea {
-  width: 100%;
-  resize: none;
-  overflow: hidden;
-  background-color: inherit;
-  transition: height 0.2s ease;
-  outline: none;
-  border: none;
 }
 
 .fileLabel {

@@ -155,7 +155,7 @@ export const CloseIcon = ({ width = "15", height = "15" }: Props) => {
   );
 };
 
-export const PencilIcon = ({ width, height }: Props) => {
+export const PencilIcon = ({ width = "15", height = "15" }: Props) => {
   return (
     <svg
       width={width}

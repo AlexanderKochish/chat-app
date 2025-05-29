@@ -1,26 +1,33 @@
 import { useSearchParams } from "react-router-dom";
 import { messageSchema, MessageSchemaType } from "../zod/message.schema";
-import { ChangeEvent, useRef, useState } from "react";
+import { ChangeEvent, useRef } from "react";
 import { useSendMessage } from "./useSendMessage";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useImgCrop } from "../../../../shared/lib/hooks/useImgCrop";
 import { useAutosizeTextarea } from "../../../../shared/hooks/useAutosizeTextarea";
 import { useProfile } from "../../../../shared/api/queries/useProfile";
-import { Crop, PixelCrop } from "react-image-crop";
+import { useImageCropStore } from "../../../../shared/model/store/imageCrop.store";
 
 export const useChatFormLogic = () => {
   const { me } = useProfile();
   const [param] = useSearchParams();
   const roomId = param.get("chatId");
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
-  const { sendMessage } = useSendMessage();
-  const [crop, setCrop] = useState<Crop>();
-  const [imgSrc, setImgSrc] = useState("");
-  const [isOpen, setIsOpen] = useState(false);
   const imgRef = useRef<HTMLImageElement | null>(null);
-  const [completedCrop, setCompletedCrop] = useState<PixelCrop>();
-  const [rawFile, setRawFile] = useState<File | null>(null);
+  const { sendMessage } = useSendMessage();
+  const {
+    crop,
+    imgSrc,
+    isOpen,
+    rawFile,
+    setCompletedCrop,
+    setCrop,
+    setImgSrc,
+    setIsOpen,
+    setRawFile,
+    completedCrop,
+  } = useImageCropStore();
 
   const { register, handleSubmit, watch, reset, setValue } =
     useForm<MessageSchemaType>({

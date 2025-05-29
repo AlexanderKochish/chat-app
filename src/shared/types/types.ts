@@ -24,12 +24,18 @@ export type Message = {
 
   createdAt: string;
   updatedAt: string;
+  edited: boolean;
 
   images?: Image[];
 
   roomId: string;
   ownerId: string;
 };
+
+export type MessageForm = Pick<
+  Message,
+  "images" | "text" | "roomId" | "ownerId"
+> & { editMessage?: string };
 
 export type Members = {
   isBanned: boolean;
