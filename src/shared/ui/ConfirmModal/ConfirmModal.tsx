@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 import { Dialog } from "radix-ui";
 import s from "./ConfirmModal.module.css";
-import { CloseIcon } from "../../assets/icons";
+import { CloseIcon } from "@shared/assets/icons";
 import Button from "../Button/Button";
 import { UseMutateFunction } from "@tanstack/react-query";
 import { AxiosResponse } from "axios";

@@ -1,8 +1,8 @@
-import { ChatLogo } from "../../../../shared/assets/icons";
+import { ChatLogo } from "@shared/assets/icons";
 import s from "./SignUp.module.css";
 import { Link } from "react-router-dom";
-import Input from "../../../../shared/ui/Input/Input";
-import Spinner from "../../../../shared/ui/Spinner/Spinner";
+import Input from "@shared/ui/Input/Input";
+import Spinner from "@shared/ui/Spinner/Spinner";
 import { useSignUp } from "../../model/hooks/useSignUp";
 
 const SignUp = () => {
@@ -23,10 +23,20 @@ const SignUp = () => {
           className={s.form}
           onSubmit={handleSubmit((data) => mutate(data))}
         >
-          <Input control={control} name="name" />
-          <Input control={control} name="email" />
-          <Input control={control} name="password" icon />
-          <Input control={control} name="confirmPassword" icon />
+          <Input control={control} name="name" placeholder="Your Name" />
+          <Input control={control} name="email" placeholder="Your Email" />
+          <Input
+            control={control}
+            name="password"
+            icon
+            placeholder="Password"
+          />
+          <Input
+            control={control}
+            name="confirmPassword"
+            icon
+            placeholder="Confirm Password"
+          />
           <button className={s.btn} type="submit">
             Sign Up
           </button>

@@ -1,8 +1,8 @@
 import { useMutation } from "@tanstack/react-query";
-import { User } from "../../../../shared/types/types";
-import UserCard from "../../../../shared/ui/UserCard/UserCard";
+import { User } from "@shared/types/types";
+import UserCard from "@shared/ui/UserCard/UserCard";
 import s from "./ChatList.module.css";
-import { addNewChat } from "../../../../shared/api";
+import { addNewChat } from "@shared/api";
 
 type Props = {
   chatList: User[];

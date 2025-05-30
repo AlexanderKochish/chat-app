@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
-import MessageList from "../../../features/send-message/ui/MessageList/MessageList";
-import { useSearchQuery } from "../../../shared/hooks/useSearchQuery";
+import MessageList from "@features/send-message/ui/MessageList/MessageList";
+import { useSearchQuery } from "@shared/hooks/useSearchQuery";
 
 type Props = {
   roomClass: string;

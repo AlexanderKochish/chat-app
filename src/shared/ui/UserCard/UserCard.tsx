@@ -1,4 +1,5 @@
-import { DrawingIcon, PersonIcon } from "../../assets/icons";
+import clsx from "clsx";
+import { DrawingIcon, PersonIcon } from "@shared/assets/icons";
 import s from "./UserCard.module.css";
 
 type Props = {
@@ -10,17 +11,18 @@ type Props = {
 };
 
 const UserCard = ({ avatar, lastMessage, name, active, isOnline }: Props) => {
+  const isActiveCard = active ? clsx(s.card, s.active) : s.card;
+  const isOnlineUser = isOnline ? s.status : clsx(s.status, s.notActive);
+
   return (
-    <div className={active ? `${s.card} ${s.active}` : s.card}>
+    <div className={isActiveCard}>
       <div className={s.img}>
         {avatar ? (
           <img src={avatar} alt={`avatar of ${name}`} className={s.avatar} />
         ) : (
           <PersonIcon width="50" height="50" />
         )}
-        <div
-          className={isOnline ? s.status : `${s.status} ${s.notActive}`}
-        ></div>
+        <div className={isOnlineUser}></div>
       </div>
       <div className={s.content}>
         <div>{name}</div>

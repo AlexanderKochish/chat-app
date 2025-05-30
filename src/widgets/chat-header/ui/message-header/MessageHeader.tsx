@@ -1,5 +1,5 @@
 import s from "./MessageHeader.module.css";
-import { useSearchUser } from "../../../../features/find-user/model/useSearchUser";
+import { useSearchUser } from "@features/find-user/model/useSearchUser";
 import {
   ArrowLeftIcon,
   BinIcon,
@@ -8,30 +8,28 @@ import {
   PencilIcon,
   PersonIcon,
   VerticalDotsIcon,
-} from "../../../../shared/assets/icons";
-import DialogModal from "../../../../shared/ui/Modal/Modal";
-import Input from "../../../../shared/ui/Input/Input";
-import ChatList from "../../../../features/add-chat/ui/chat-list/ChatList";
-import DropdownMenuCustom from "../../../../shared/ui/DropdownMenu/DropdownMenu";
-import { useMatchMedia } from "../../../../shared/hooks/useMatchMedia";
-import { useSearchParams } from "react-router-dom";
-import { useChatCompanion } from "../../../../shared/api/queries/useChatCompanion";
-import { Dispatch, useState } from "react";
-import ConfirmModal from "../../../../shared/ui/ConfirmModal/ConfirmModal";
-import { useLogout } from "../../../../features/auth/model/hooks/useLogout";
-import DropDownItem from "../../../../shared/ui/DropdownItem/DropDownItem";
+} from "@shared/assets/icons";
+import DialogModal from "@shared/ui/Modal/Modal";
+import Input from "@shared/ui/Input/Input";
+import ChatList from "@features/add-chat/ui/chat-list/ChatList";
+import DropdownMenuCustom from "@shared/ui/DropdownMenu/DropdownMenu";
+import { useChatCompanion } from "@shared/api/queries/useChatCompanion";
+import ConfirmModal from "@shared/ui/ConfirmModal/ConfirmModal";
+import { useLogout } from "@features/auth/model/hooks/useLogout";
+import DropDownItem from "@shared/ui/DropdownItem/DropDownItem";
+import { useChatLayoutStore } from "@/features/chat-layout/model/store/useChatLayoutStore";
+import { useChatLayoutLogic } from "@/features/chat-layout/model/hooks/useChatLayoutLogic";
 
-type Props = {
-  setIsActive: Dispatch<React.SetStateAction<boolean>>;
-};
-
-const MessageHeader = ({ setIsActive }: Props) => {
-  const [isSearch, setIsSearch] = useState(false);
-  const [isRemoveChat, setIsRemoveChat] = useState(false);
-  const [param] = useSearchParams();
-  const roomId = param.get("chatId") as string;
+const MessageHeader = () => {
+  const {
+    toggleIsActive,
+    isRemoveChat,
+    isSearch,
+    setIsSearch,
+    setIsRemoveChat,
+  } = useChatLayoutStore();
+  const { isMobile, roomId } = useChatLayoutLogic();
   const { control, handleSubmit, data } = useSearchUser();
-  const { isMobile } = useMatchMedia();
   const { companion } = useChatCompanion(roomId);
   const { mutate } = useLogout();
 
@@ -39,10 +37,7 @@ const MessageHeader = ({ setIsActive }: Props) => {
     <div className={s.topNavbar}>
       <div className={s.chosenUser}>
         {isMobile && (
-          <button
-            className={s.btnWrapper}
-            onClick={() => setIsActive((isActive: boolean) => !isActive)}
-          >
+          <button className={s.btnWrapper} onClick={toggleIsActive}>
             <ArrowLeftIcon width="25" height="25" />
           </button>
         )}

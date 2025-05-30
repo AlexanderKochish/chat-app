@@ -1,28 +1,28 @@
 import s from "./MessageList.module.css";
-import { Message } from "../../../../shared/types";
-import ChatForm from "../../../chat-form/ui/ChatForm/ChatForm";
-import ShowImageModal from "../../../../shared/ui/ShowImagePhoto/ShowImageModal";
-import { Slider } from "../../../../shared/ui/Slider/Slider";
-import ImageViewerToolbar from "../../../../shared/ui/ImageViewerToolbar/ImageViewerToolbar";
+import { Message } from "@shared/types";
+import ChatForm from "@features/chat-form/ui/ChatForm/ChatForm";
+import ShowImageModal from "@shared/ui/ShowImagePhoto/ShowImageModal";
+import { Slider } from "@shared/ui/Slider/Slider";
+import ImageViewerToolbar from "@shared/ui/ImageViewerToolbar/ImageViewerToolbar";
 import MessageItem from "../MessageItem/MessageItem";
 import { useMessageList } from "../../model/hooks/useMessageList";
 import { useImageModal } from "../../model/hooks/useImageModal";
-import { ArrowDown } from "../../../../shared/assets/icons";
+import { ArrowDown } from "@shared/assets/icons";
 import { useCallback, useEffect, useState } from "react";
 import { useChatMessagesStore } from "../../model/store/chatMessage.store";
 
 const MessageList = () => {
   const [isVisible, setIsVisible] = useState(false);
-  const { param, containerRef, loaderRef } = useMessageList();
+  const { roomId, containerRef, loaderRef } = useMessageList();
   const { messages, hasMore, loading } = useChatMessagesStore();
   const {
     isOpen,
     setIsOpen,
     roomImages,
     imageIndex,
-    handleOpenModal,
     resetModal,
-  } = useImageModal(param);
+    handleOpenModal,
+  } = useImageModal(roomId);
 
   const handleScroll = useCallback(() => {
     const container = containerRef.current;
@@ -52,14 +52,14 @@ const MessageList = () => {
 
   return (
     <div className={s.chatWrapper}>
-      {param && <ChatForm />}
+      {roomId && <ChatForm />}
       <div className={s.chatMessagge} ref={containerRef}>
         {messages &&
           messages.map((item: Message) => (
             <MessageItem
               item={item}
               key={item.id}
-              onImageClick={handleOpenModal}
+              setOpenImage={handleOpenModal}
             />
           ))}
         {hasMore || loading ? (

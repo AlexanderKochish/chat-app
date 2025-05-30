@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
 import s from "./SignIn.module.css";
-import { ChatLogo } from "../../../../shared/assets/icons";
-import Input from "../../../../shared/ui/Input/Input";
+import { ChatLogo } from "@shared/assets/icons";
+import Input from "@shared/ui/Input/Input";
 import { useSignIn } from "../../model/hooks/useSignIn";
-import Spinner from "../../../../shared/ui/Spinner/Spinner";
+import Spinner from "@shared/ui/Spinner/Spinner";
 
 const SignIn = () => {
   const { handleSubmit, control, mutate, isPending } = useSignIn();
@@ -23,8 +23,13 @@ const SignIn = () => {
           className={s.form}
           onSubmit={handleSubmit((data) => mutate(data))}
         >
-          <Input control={control} name="email" />
-          <Input control={control} name="password" icon />
+          <Input control={control} name="email" placeholder="Email" />
+          <Input
+            control={control}
+            name="password"
+            icon
+            placeholder="Password"
+          />
           <button className={s.btn} type="submit">
             Sign In
           </button>

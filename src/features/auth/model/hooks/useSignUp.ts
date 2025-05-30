@@ -3,7 +3,7 @@ import { signUpSchema, SignUpSchemaType } from "../zod/auth.schema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
-import { signUp } from "../../../../shared/api";
+import { signUp } from "@shared/api";
 import toast from "react-hot-toast";
 
 export const useSignUp = () => {

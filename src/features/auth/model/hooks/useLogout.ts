@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
-import { logout } from "../../../../shared/api";
+import { logout } from "@shared/api";
 
 export const useLogout = () => {
   const navigate = useNavigate();

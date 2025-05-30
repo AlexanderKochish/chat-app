@@ -1,22 +1,22 @@
 import clsx from "clsx";
 import s from "./MessageItem.module.css";
-import { useProfile } from "../../../../shared/api/queries/useProfile";
-import { Message } from "../../../../shared/types";
-import { LinkifiedText } from "../../../../shared/ui/LinkifiedText/LinkifiedText";
+import { Message } from "@shared/types";
+import { LinkifiedText } from "@shared/ui/LinkifiedText/LinkifiedText";
 import { format } from "date-fns";
-import DropDownItem from "../../../../shared/ui/DropdownItem/DropDownItem";
-import { BinIcon, CopyIcon, PencilIcon } from "../../../../shared/assets/icons";
-import { MessageDropdown } from "../../../../shared/ui/MessageDropDown/MessageDropdown";
+import DropDownItem from "@shared/ui/DropdownItem/DropDownItem";
+import { BinIcon, CopyIcon, PencilIcon } from "@shared/assets/icons";
+import { MessageDropdown } from "@shared/ui/MessageDropDown/MessageDropdown";
 import { useSendMessage } from "../../model/hooks/useSendMessage";
 import { useMessageContextMenu } from "../../model/hooks/useMessageContextMenu";
+import { useChatLayoutLogic } from "@/features/chat-layout/model/hooks/useChatLayoutLogic";
 
 type Props = {
   item: Message;
-  onImageClick: (id: string) => void;
+  setOpenImage: (id: string) => void;
 };
 
-const MessageItem = ({ item, onImageClick }: Props) => {
-  const { me } = useProfile();
+const MessageItem = ({ item, setOpenImage }: Props) => {
+  const { me } = useChatLayoutLogic();
   const { removeMessage } = useSendMessage();
   const {
     openMessageId,
@@ -27,6 +27,15 @@ const MessageItem = ({ item, onImageClick }: Props) => {
   } = useMessageContextMenu();
   const isOpen = openMessageId === item.id;
   const ownMessage = item.ownerId === me?.id ? s.own : "";
+
+  const handleRemoveMessage = (item: Message) => {
+    removeMessage({
+      roomId: item.roomId,
+      msgId: item.id,
+      ownerId: item.ownerId,
+    });
+  };
+
   return (
     <div
       onContextMenu={(e) => handleEditMessage(e, item.id)}
@@ -45,7 +54,7 @@ const MessageItem = ({ item, onImageClick }: Props) => {
                 src={url}
                 alt="message"
                 className={s.messageImage}
-                onClick={() => onImageClick(id)}
+                onClick={() => setOpenImage(id)}
               />
             </div>
           ))}
@@ -71,13 +80,7 @@ const MessageItem = ({ item, onImageClick }: Props) => {
           icon={<BinIcon width="20" height="20" />}
           className="danger"
           text="Delete"
-          onClick={() =>
-            removeMessage({
-              roomId: item.roomId,
-              msgId: item.id,
-              ownerId: item.ownerId,
-            })
-          }
+          onClick={() => handleRemoveMessage(item)}
         />
       </MessageDropdown>
     </div>

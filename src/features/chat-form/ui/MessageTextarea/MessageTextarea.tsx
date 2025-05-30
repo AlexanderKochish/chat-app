@@ -1,7 +1,7 @@
 import { RefObject } from "react";
 import { UseFormRegister } from "react-hook-form";
 import s from "./MessageTextarea.module.css";
-import { MessageSchemaType } from "../../../send-message/model/zod/message.schema";
+import { MessageSchemaType } from "@features/send-message/model/zod/message.schema";
 
 type Props = {
   register: UseFormRegister<MessageSchemaType>;

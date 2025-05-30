@@ -1,26 +1,22 @@
-import {
-  EmojiIcon,
-  PaperPlaneIcon,
-  UploadIcon,
-} from "../../../../shared/assets/icons";
+import { EmojiIcon, PaperPlaneIcon, UploadIcon } from "@shared/assets/icons";
 import s from "./ChatForm.module.css";
 import ReactCrop from "react-image-crop";
-import CropFileModal from "../../../send-message/ui/CropFileModal/CropFileModal";
-import { useChatFormLogic } from "../../../send-message/model/hooks/useChatFormLogic";
+import CropFileModal from "@features/send-message/ui/CropFileModal/CropFileModal";
+import { useChatFormLogic } from "@features/send-message/model/hooks/useChatFormLogic";
 import EmojiPicker from "emoji-picker-react";
-import PopoverCustom from "../../../../shared/ui/Popover/PopoverCustom";
+import PopoverCustom from "@shared/ui/Popover/PopoverCustom";
 import { EmojiClickData, Theme } from "emoji-picker-react";
-import { useEditMessage } from "../../../send-message/model/store/editMessage.store";
+import { useEditMessage } from "@features/send-message/model/store/editMessage.store";
 import {
   editMessage,
   editMessageSchemaType,
-} from "../../../send-message/model/zod/editMessage.schema";
+} from "@features/send-message/model/zod/editMessage.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
-import { useSendMessage } from "../../../send-message/model/hooks/useSendMessage";
-import { useProfile } from "../../../../shared/api/queries/useProfile";
+import { useSendMessage } from "@features/send-message/model/hooks/useSendMessage";
+import { useProfile } from "@shared/api/queries/useProfile";
 
 const ChatForm = () => {
   const { me } = useProfile();

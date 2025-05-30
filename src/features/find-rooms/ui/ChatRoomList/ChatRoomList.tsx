@@ -1,17 +1,13 @@
 import { useSearchParams } from "react-router-dom";
-import { useProfile } from "../../../../shared/api/queries/useProfile";
-import { ChatRoomResponse } from "../../../../shared/types";
-import UserCard from "../../../../shared/ui/UserCard/UserCard";
+import { ChatRoomResponse } from "@shared/types";
+import UserCard from "@shared/ui/UserCard/UserCard";
 import { useChatRooms } from "../../model/hooks/useChatRooms";
 import s from "./ChatRoomList.module.css";
 import { useUserOnline } from "../../model/hooks/useUserOnline";
+import { useChatLayoutLogic } from "@/features/chat-layout/model/hooks/useChatLayoutLogic";
 
-type Props = {
-  findMyChat: (id: string) => void;
-};
-
-const ChatRoomList = ({ findMyChat }: Props) => {
-  const { me } = useProfile();
+const ChatRoomList = () => {
+  const { findMyChat, me } = useChatLayoutLogic();
   const { chatRooms } = useChatRooms();
   const [param] = useSearchParams();
   const roomId = param.get("chatId");

@@ -1,10 +1,10 @@
 import { useEffect, useRef } from "react";
 
-interface Props {
+type Props = {
   hasMore: boolean;
   loading?: boolean;
   fetchMore: () => Promise<void>;
-}
+};
 
 export const useIntersectionObserver = ({
   hasMore,

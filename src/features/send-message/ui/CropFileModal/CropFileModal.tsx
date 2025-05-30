@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 import { Dialog } from "radix-ui";
 import s from "./CropFileModal.module.css";
-import { CloseIcon } from "../../../../shared/assets/icons";
+import { CloseIcon } from "@shared/assets/icons";
 
 type Props = {
   trigger?: ReactNode;

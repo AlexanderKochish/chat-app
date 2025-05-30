@@ -3,20 +3,19 @@ import {
   HamburgerMenuIcon,
   LogoutIcon,
   ProfileIcon,
-} from "../../../../shared/assets/icons";
-import DropdownMenuCustom from "../../../../shared/ui/DropdownMenu/DropdownMenu";
-import DialogModal from "../../../../shared/ui/Modal/Modal";
-import { Profile } from "../../../../features/profile/ui/Profile/Profile";
+} from "@shared/assets/icons";
+import DropdownMenuCustom from "@shared/ui/DropdownMenu/DropdownMenu";
+import DialogModal from "@shared/ui/Modal/Modal";
+import { Profile } from "@features/profile/ui/Profile/Profile";
 import s from "./MainHeader.module.css";
-import { useState } from "react";
-import { useLogout } from "../../../../features/auth/model/hooks/useLogout";
-import ConfirmModal from "../../../../shared/ui/ConfirmModal/ConfirmModal";
-import DropDownItem from "../../../../shared/ui/DropdownItem/DropDownItem";
+import { useLogout } from "@features/auth/model/hooks/useLogout";
+import ConfirmModal from "@shared/ui/ConfirmModal/ConfirmModal";
+import DropDownItem from "@shared/ui/DropdownItem/DropDownItem";
+import { useChatLayoutStore } from "@/features/chat-layout/model/store/useChatLayoutStore";
 
 const MainHeader = () => {
-  const [isLogout, setIsLogout] = useState(false);
-  const [isProfile, setIsProfile] = useState(false);
-
+  const { isLogout, setIsLogout, isProfile, setIsProfile } =
+    useChatLayoutStore();
   const { mutate } = useLogout();
 
   return (

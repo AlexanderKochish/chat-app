@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { signInSchema, SignInSchemaType } from "../zod/auth.schema";
 import { useMutation } from "@tanstack/react-query";
-import { signIn } from "../../../../shared/api";
+import { signIn } from "@shared/api";
 import toast from "react-hot-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";

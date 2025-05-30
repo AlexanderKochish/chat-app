@@ -8,6 +8,7 @@ interface MyInputProps<T extends FieldValues> {
   name: Path<T>;
   icon?: boolean;
   defaultValue?: string;
+  placeholder?: string;
 }
 
 const Input = <T extends FieldValues>({
@@ -15,6 +16,7 @@ const Input = <T extends FieldValues>({
   name,
   control,
   icon = false,
+  placeholder,
 }: MyInputProps<T>) => {
   const {
     field,
@@ -26,7 +28,7 @@ const Input = <T extends FieldValues>({
   const changeInputType = show ? "text" : "password";
 
   return (
-    <>
+    <div className={s.inputBlock}>
       <div className={s.inputWrapper}>
         <input
           {...field}
@@ -34,6 +36,7 @@ const Input = <T extends FieldValues>({
           id={name}
           type={!icon ? "text" : changeInputType}
           defaultValue={defaultValue}
+          placeholder={placeholder}
         />
         {icon && (
           <button
@@ -50,7 +53,7 @@ const Input = <T extends FieldValues>({
           {error?.message}
         </label>
       )}
-    </>
+    </div>
   );
 };
 
