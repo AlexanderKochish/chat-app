@@ -10,6 +10,7 @@ import { useSendMessage } from "../../model/hooks/useSendMessage";
 import { useMessageContextMenu } from "../../model/hooks/useMessageContextMenu";
 import { useChatLayoutLogic } from "@/features/chat-layout/model/hooks/useChatLayoutLogic";
 import { motion } from "framer-motion";
+import { copyToClipboard } from "@/shared/lib/helpers/copyToClipboard";
 
 type Props = {
   item: Message;
@@ -45,10 +46,10 @@ const MessageItem = ({ item, setOpenImage }: Props) => {
     >
       <motion.div
         className={clsx(s.messageWrapper, ownMessage)}
-        initial={{ opacity: 0, x: 25 }}
+        initial={{ opacity: 0, x: 20 }}
         animate={{ opacity: 1, x: 0 }}
-        exit={{ opacity: 0, x: -25 }}
-        transition={{ duration: 0.5 }}
+        exit={{ opacity: 0, x: -20 }}
+        transition={{ duration: 0.3 }}
       >
         <span>
           <LinkifiedText text={item.text} />
@@ -73,12 +74,21 @@ const MessageItem = ({ item, setOpenImage }: Props) => {
         position={dropdownPosition}
         onClose={onCloseMenu}
       >
+        {item.ownerId === me?.id && (
+          <DropDownItem
+            icon={<PencilIcon />}
+            text="Edit"
+            onClick={() => edit(item.id, item.text)}
+          />
+        )}
         <DropDownItem
-          icon={<PencilIcon />}
-          text="Edit"
-          onClick={() => edit(item.id, item.text)}
+          icon={<CopyIcon />}
+          text="Copy"
+          onClick={() => {
+            copyToClipboard(item.text);
+            onCloseMenu();
+          }}
         />
-        <DropDownItem icon={<CopyIcon />} text="Copy" />
         <DropDownItem
           icon={<BinIcon width="20" height="20" />}
           className="danger"
