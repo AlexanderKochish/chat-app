@@ -2,7 +2,8 @@ import clsx from "clsx";
 import "keen-slider/keen-slider.min.css";
 import { useKeenSlider } from "keen-slider/react";
 import s from "./Slider.module.css";
-import { ChevronLeftIcon, ChevronRightIcon } from "../../assets/icons";
+import { ChevronLeftIcon, ChevronRightIcon } from "@shared/assets/icons";
+import { useZoomStore } from "@/features/image-viewer/model/store/zoom.store";
 
 type Props = {
   slides: Array<{ id: string; url: string; messageId: string }>;
@@ -14,18 +15,21 @@ export const Slider = ({ slides, className = "", initialSlide }: Props) => {
   const [sliderRef, slider] = useKeenSlider<HTMLDivElement>({
     initial: initialSlide,
   });
+  const zoom = useZoomStore((state) => state.zoom);
+  const resetZoom = useZoomStore((state) => state.resetZoom);
 
-  console.log(initialSlide);
   return (
-    <div
-      ref={sliderRef}
-      className={clsx("keen-slider", s.sliderWrapper, className)}
-    >
+    <div ref={sliderRef} className={clsx(s.sliderWrapper, className)}>
       {slides &&
         slides.map(({ url, id }) => (
           <div key={id} className="keen-slider__slide">
             <div className={s.imageWrapper}>
-              <img className={s.img} src={url} alt="chat image" />
+              <img
+                className={s.img}
+                src={url}
+                alt="chat image"
+                style={{ transform: `scale(${zoom})` }}
+              />
             </div>
           </div>
         ))}
@@ -33,14 +37,20 @@ export const Slider = ({ slides, className = "", initialSlide }: Props) => {
       <button
         className={clsx(s.arrow, s.left)}
         aria-label="Previous Slide"
-        onClick={() => slider.current?.prev()}
+        onClick={() => {
+          slider.current?.prev();
+          resetZoom();
+        }}
       >
         <ChevronLeftIcon width="50" height="50" />
       </button>
       <button
         className={clsx(s.arrow, s.right)}
         aria-label="Next Slide"
-        onClick={() => slider.current?.next()}
+        onClick={() => {
+          slider.current?.next();
+          resetZoom();
+        }}
       >
         <ChevronRightIcon width="50" height="50" />
       </button>
