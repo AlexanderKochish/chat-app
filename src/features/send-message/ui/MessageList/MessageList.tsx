@@ -10,6 +10,7 @@ import { useImageModal } from "../../model/hooks/useImageModal";
 import { ArrowDown } from "@shared/assets/icons";
 import { useCallback, useEffect, useState } from "react";
 import { useChatMessagesStore } from "../../model/store/chatMessage.store";
+import { AnimatePresence } from "framer-motion";
 
 const MessageList = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -54,14 +55,16 @@ const MessageList = () => {
     <div className={s.chatWrapper}>
       {roomId && <ChatForm />}
       <div className={s.chatMessagge} ref={containerRef}>
-        {messages &&
-          messages.map((item: Message) => (
-            <MessageItem
-              item={item}
-              key={item.id}
-              setOpenImage={handleOpenModal}
-            />
-          ))}
+        <AnimatePresence initial={false}>
+          {messages &&
+            messages.map((item: Message) => (
+              <MessageItem
+                item={item}
+                key={item.id}
+                setOpenImage={handleOpenModal}
+              />
+            ))}
+        </AnimatePresence>
         {hasMore || loading ? (
           <div
             ref={loaderRef}

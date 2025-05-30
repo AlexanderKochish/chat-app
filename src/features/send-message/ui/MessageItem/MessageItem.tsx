@@ -9,6 +9,7 @@ import { MessageDropdown } from "@shared/ui/MessageDropDown/MessageDropdown";
 import { useSendMessage } from "../../model/hooks/useSendMessage";
 import { useMessageContextMenu } from "../../model/hooks/useMessageContextMenu";
 import { useChatLayoutLogic } from "@/features/chat-layout/model/hooks/useChatLayoutLogic";
+import { motion } from "framer-motion";
 
 type Props = {
   item: Message;
@@ -34,6 +35,7 @@ const MessageItem = ({ item, setOpenImage }: Props) => {
       msgId: item.id,
       ownerId: item.ownerId,
     });
+    onCloseMenu();
   };
 
   return (
@@ -41,7 +43,13 @@ const MessageItem = ({ item, setOpenImage }: Props) => {
       onContextMenu={(e) => handleEditMessage(e, item.id)}
       className={clsx(s.message, ownMessage, isOpen ? s.editMessage : "")}
     >
-      <div className={clsx(s.messageWrapper, ownMessage)}>
+      <motion.div
+        className={clsx(s.messageWrapper, ownMessage)}
+        initial={{ opacity: 0, x: 25 }}
+        animate={{ opacity: 1, x: 0 }}
+        exit={{ opacity: 0, x: -25 }}
+        transition={{ duration: 0.5 }}
+      >
         <span>
           <LinkifiedText text={item.text} />
         </span>
@@ -49,13 +57,8 @@ const MessageItem = ({ item, setOpenImage }: Props) => {
         {item.images &&
           item.images.length > 0 &&
           item.images.map(({ id, url }) => (
-            <div key={id}>
-              <img
-                src={url}
-                alt="message"
-                className={s.messageImage}
-                onClick={() => setOpenImage(id)}
-              />
+            <div key={id} className={s.messageImage}>
+              <img src={url} alt="message" onClick={() => setOpenImage(id)} />
             </div>
           ))}
         <div className={s.messageInfo}>
@@ -64,7 +67,7 @@ const MessageItem = ({ item, setOpenImage }: Props) => {
             {format(new Date(item.createdAt), "hh:mm a")}
           </span>
         </div>
-      </div>
+      </motion.div>
       <MessageDropdown
         isOpen={isOpen}
         position={dropdownPosition}

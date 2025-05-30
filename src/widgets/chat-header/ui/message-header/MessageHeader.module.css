@@ -12,7 +12,6 @@
 
 .chosenUser {
   display: flex;
-  align-items: center;
   column-gap: 10px;
 }
 
@@ -35,6 +34,15 @@
   &:hover {
     background-color: #454e60;
   }
+}
+
+.chosenUsername {
+  display: flex;
+  flex-direction: column;
+}
+
+.typing {
+  font-size: 12px;
 }
 
 .avatar {

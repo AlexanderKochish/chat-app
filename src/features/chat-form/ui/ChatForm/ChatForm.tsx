@@ -14,16 +14,14 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
 import { useSendMessage } from "@features/send-message/model/hooks/useSendMessage";
 import { useProfile } from "@shared/api/queries/useProfile";
+import { useSearchQuery } from "@/shared/hooks/useSearchQuery";
 
 const ChatForm = () => {
   const { me } = useProfile();
-  const [searchParam] = useSearchParams();
-  const roomId = searchParam.get("chatId") as string;
-
-  const { updateMessage } = useSendMessage();
+  const { param: roomId } = useSearchQuery("chatId");
+  const { updateMessage, handleTyping } = useSendMessage();
   const {
     formProps: { handleSubmit, register, textAreaRef, setValue, watch },
     cropProps: {
@@ -96,6 +94,10 @@ const ChatForm = () => {
             className={s.textArea}
             {...register("text")}
             name="text"
+            onChange={(e) => {
+              handleTyping(roomId, me?.id);
+              register("text").onChange(e);
+            }}
             ref={(e) => {
               register("text").ref(e);
               textAreaRef.current = e;
@@ -107,6 +109,10 @@ const ChatForm = () => {
             className={s.textArea}
             {...editRegister("editMessage")}
             name="editMessage"
+            onChange={(e) => {
+              handleTyping(roomId, me?.id);
+              editRegister("editMessage").onChange(e);
+            }}
             ref={(e) => {
               editRegister("editMessage").ref(e);
               textAreaRef.current = e;

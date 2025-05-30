@@ -44,5 +44,10 @@ export const useSendMessage = () => {
     socket?.emit("removeMessage", data);
   };
 
-  return { sendMessage, updateMessage, removeMessage };
+  const handleTyping = (roomId: string, userId: string) => {
+    const data = { roomId, userId };
+    socket?.emit("userTyping", data);
+  };
+
+  return { sendMessage, updateMessage, removeMessage, handleTyping };
 };

@@ -19,6 +19,7 @@ import { useLogout } from "@features/auth/model/hooks/useLogout";
 import DropDownItem from "@shared/ui/DropdownItem/DropDownItem";
 import { useChatLayoutStore } from "@/features/chat-layout/model/store/useChatLayoutStore";
 import { useChatLayoutLogic } from "@/features/chat-layout/model/hooks/useChatLayoutLogic";
+import { useTypingListener } from "@/shared/lib/hooks/useTypingListener";
 
 const MessageHeader = () => {
   const {
@@ -32,6 +33,7 @@ const MessageHeader = () => {
   const { control, handleSubmit, data } = useSearchUser();
   const { companion } = useChatCompanion(roomId);
   const { mutate } = useLogout();
+  const { isTyping } = useTypingListener();
 
   return (
     <div className={s.topNavbar}>
@@ -51,7 +53,10 @@ const MessageHeader = () => {
         ) : (
           <PersonIcon width="50" height="50" />
         )}
-        <span>{companion?.user.name}</span>
+        <div className={s.chosenUsername}>
+          <span>{companion?.user.name}</span>
+          {isTyping && <span className={s.typing}>typing...</span>}
+        </div>
       </div>
       <div className={s.chatNav}>
         <DialogModal
