@@ -28,8 +28,8 @@ export const useImgCrop = ({
       completedCrop.height! * scaleY,
       0,
       0,
-      completedCrop.width!,
-      completedCrop.height!,
+      completedCrop.width,
+      completedCrop.height,
     );
 
     return new Promise((resolve) => {

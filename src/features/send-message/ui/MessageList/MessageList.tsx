@@ -56,14 +56,13 @@ const MessageList = () => {
       {roomId && <ChatForm />}
       <div className={s.chatMessagge} ref={containerRef}>
         <AnimatePresence initial={false}>
-          {messages &&
-            messages.map((item: Message) => (
-              <MessageItem
-                item={item}
-                key={item.id}
-                setOpenImage={handleOpenModal}
-              />
-            ))}
+          {messages?.map((item: Message) => (
+            <MessageItem
+              item={item}
+              key={item.id}
+              setOpenImage={handleOpenModal}
+            />
+          ))}
         </AnimatePresence>
         {hasMore || loading ? (
           <div
@@ -82,11 +81,11 @@ const MessageList = () => {
             <ImageViewerToolbar
               imageIndex={imageIndex}
               onModalReset={resetModal}
-              roomImages={roomImages || []}
+              roomImages={roomImages ?? []}
             />
           }
         >
-          <Slider slides={roomImages || []} initialSlide={imageIndex} />
+          <Slider slides={roomImages ?? []} initialSlide={imageIndex} />
         </ShowImageModal>
       </div>
       {isVisible && (

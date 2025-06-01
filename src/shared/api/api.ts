@@ -24,7 +24,7 @@ const api = axios.create({
 
 const handlerError = async (error: unknown) => {
   if (error instanceof AxiosError) {
-    throw new Error(error.response?.data || error.message);
+    throw new Error(error.response?.data ?? error.message);
   }
   throw new Error("An expected error occurred");
 };
@@ -52,12 +52,17 @@ api.interceptors.response.use(
         await refreshTokens();
         return api(originalRequest);
       } catch (refreshError) {
-        // navigate('/sign-in')
-        return Promise.reject(refreshError);
+        return Promise.reject(
+          refreshError instanceof Error
+            ? refreshError
+            : new Error("Unexpected error during token refresh"),
+        );
       }
     }
 
-    return Promise.reject(error);
+    return Promise.reject(
+      error instanceof Error ? error : new Error("Unexpected error"),
+    );
   },
 );
 
@@ -149,7 +154,7 @@ export const getCurrentChat = async (roomId: string, cursor?: string) => {
     });
 
     const hasMore = res.data.messages.length === 20;
-    const messages = res.data.messages || [];
+    const messages = res.data.messages ?? [];
 
     return { messages, hasMore };
   } catch (error) {

@@ -22,7 +22,13 @@ const ChatRoomList = () => {
   return (
     <div className={s.openedChats}>
       {chatRooms?.map(({ id, members, messages }: ChatRoomResponse) => (
-        <li key={id} onClick={() => findMyChat(id)}>
+        <li
+          key={id}
+          onClick={() => findMyChat(id)}
+          onKeyDown={(e) => e.key === "Enter" && findMyChat(id)}
+          role="button"
+          tabIndex={0}
+        >
           {members.map((user) => {
             if (me?.id !== user.userId) {
               return (

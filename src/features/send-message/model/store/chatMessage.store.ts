@@ -1,6 +1,6 @@
 import { create } from "zustand";
-import { getCurrentChat } from "../../../../shared/api";
-import { Message } from "../../../../shared/types";
+import { getCurrentChat } from "@shared/api";
+import { Message } from "@shared/types";
 
 interface ChatMessagesState {
   messages: Message[];
@@ -52,8 +52,8 @@ export const useChatMessagesStore = create<ChatMessagesState>((set, get) => ({
 
     set({ loading: true });
     try {
-      const res = await getCurrentChat(roomId, cursor || undefined);
-      const newMessages = res?.messages || [];
+      const res = await getCurrentChat(roomId, cursor ?? undefined);
+      const newMessages = res?.messages ?? [];
       const existingIds = new Set(messages.map((msg) => msg.id));
       const uniqueNewMessages = newMessages.filter(
         (msg: { id: string }) => !existingIds.has(msg.id),
@@ -61,7 +61,7 @@ export const useChatMessagesStore = create<ChatMessagesState>((set, get) => ({
 
       set({
         messages: [...messages, ...uniqueNewMessages],
-        cursor: newMessages[newMessages.length - 1]?.id || null,
+        cursor: newMessages[newMessages.length - 1]?.id ?? null,
         hasMore: Boolean(res?.hasMore),
       });
     } catch (error) {

@@ -74,7 +74,7 @@ export const useChatFormLogic = () => {
       roomId,
       ownerId: me?.id,
       text: data.text,
-      images: data.images || [],
+      images: data.images ?? [],
     };
     await sendMessage(message as MessageSchemaType);
     reset();

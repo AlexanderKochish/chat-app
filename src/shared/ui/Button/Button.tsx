@@ -16,7 +16,7 @@ const Button = <T extends ElementType = "button">({
   size = "regular",
   ...rest
 }: Props<T>) => {
-  const Component = asComponent || "button";
+  const Component = asComponent ?? "button";
 
   return (
     <Component className={clsx(s.btn, s[size], s[color])} {...rest}>

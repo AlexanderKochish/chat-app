@@ -20,19 +20,18 @@ export const Slider = ({ slides, className = "", initialSlide }: Props) => {
 
   return (
     <div ref={sliderRef} className={clsx(s.sliderWrapper, className)}>
-      {slides &&
-        slides.map(({ url, id }) => (
-          <div key={id} className="keen-slider__slide">
-            <div className={s.imageWrapper}>
-              <img
-                className={s.img}
-                src={url}
-                alt="chat image"
-                style={{ transform: `scale(${zoom})` }}
-              />
-            </div>
+      {slides?.map(({ url, id }) => (
+        <div key={id} className="keen-slider__slide">
+          <div className={s.imageWrapper}>
+            <img
+              className={s.img}
+              src={url}
+              alt="chat"
+              style={{ transform: `scale(${zoom})` }}
+            />
           </div>
-        ))}
+        </div>
+      ))}
 
       <button
         className={clsx(s.arrow, s.left)}

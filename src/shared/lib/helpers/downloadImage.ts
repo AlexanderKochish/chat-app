@@ -4,6 +4,6 @@ export const handleDownloadImage = (url: string) => {
     : url;
   const link = document.createElement("a");
   link.href = downloadUrl;
-  link.download = downloadUrl.split("/").pop() || "image.jpg";
+  link.download = downloadUrl.split("/").pop() ?? "image.jpg";
   link.click();
 };

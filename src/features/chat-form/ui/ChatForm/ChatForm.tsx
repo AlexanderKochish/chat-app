@@ -3,9 +3,8 @@ import s from "./ChatForm.module.css";
 import ReactCrop from "react-image-crop";
 import CropFileModal from "@features/send-message/ui/CropFileModal/CropFileModal";
 import { useChatFormLogic } from "@features/send-message/model/hooks/useChatFormLogic";
-import EmojiPicker from "emoji-picker-react";
+import EmojiPicker, { EmojiClickData, Theme } from "emoji-picker-react";
 import PopoverCustom from "@shared/ui/Popover/PopoverCustom";
-import { EmojiClickData, Theme } from "emoji-picker-react";
 import { useEditMessage } from "@features/send-message/model/store/editMessage.store";
 import {
   editMessage,

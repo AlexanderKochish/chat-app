@@ -5,7 +5,7 @@ type Props = {
   className?: string;
 };
 
-const urlRegex = /\b((https?:\/\/|www\.|mailto:|tel:)[^\s<>"']{1,})/gi;
+const urlRegex = /\b((https?:\/\/|www\.|mailto:|tel:)[^\s<>"']+)/gi;
 
 export const LinkifiedText = ({ text, className }: Props) => {
   const matches = text.match(urlRegex) || [];
@@ -23,7 +23,7 @@ export const LinkifiedText = ({ text, className }: Props) => {
 
     parts.push(
       <a
-        key={i}
+        key={`${i}#${match}`}
         href={match.startsWith("http") ? match : `https://${match}`}
         target="_blank"
         rel="noopener noreferrer"

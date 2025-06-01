@@ -43,6 +43,8 @@ const MessageItem = ({ item, setOpenImage }: Props) => {
     <div
       onContextMenu={(e) => handleEditMessage(e, item.id)}
       className={clsx(s.message, ownMessage, isOpen ? s.editMessage : "")}
+      tabIndex={0}
+      role="button"
     >
       <motion.div
         className={clsx(s.messageWrapper, ownMessage)}
@@ -58,8 +60,15 @@ const MessageItem = ({ item, setOpenImage }: Props) => {
         {item.images &&
           item.images.length > 0 &&
           item.images.map(({ id, url }) => (
-            <div key={id} className={s.messageImage}>
-              <img src={url} alt="message" onClick={() => setOpenImage(id)} />
+            <div
+              key={id}
+              className={s.messageImage}
+              onClick={() => setOpenImage(id)}
+              onKeyDown={(e) => e.key === "Enter" && setOpenImage(id)}
+              role="button"
+              tabIndex={0}
+            >
+              <img src={url} alt="message" />
             </div>
           ))}
         <div className={s.messageInfo}>

@@ -20,17 +20,15 @@ const TextArea = <T extends FieldValues>({
     formState: { errors, isSubmitted },
   } = useController({ name, control });
   return (
-    <>
-      <div className={s.textareaWrapper}>
-        {icon}
-        <textarea {...field} id={name} defaultValue={defaultValue} />
-        {errors && isSubmitted && (
-          <label className={s.error} htmlFor={name}>
-            {error?.message}
-          </label>
-        )}
-      </div>
-    </>
+    <div className={s.textareaWrapper}>
+      {icon}
+      <textarea {...field} id={name} defaultValue={defaultValue} />
+      {errors && isSubmitted && (
+        <label className={s.error} htmlFor={name}>
+          {error?.message}
+        </label>
+      )}
+    </div>
   );
 };
 

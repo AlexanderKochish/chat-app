@@ -16,12 +16,17 @@ const ChatList = ({ chatList }: Props) => {
 
   return (
     <ul className={s.searchList}>
-      {chatList &&
-        chatList.map(({ profile, name }) => (
-          <li key={profile.userId} onClick={() => mutate(profile.userId)}>
-            <UserCard name={name} avatar={profile?.avatar as string} />
-          </li>
-        ))}
+      {chatList?.map(({ profile, name }) => (
+        <li
+          key={profile.userId}
+          onClick={() => mutate(profile.userId)}
+          onKeyDown={(e) => e.key === "Enter" && mutate(profile.userId)}
+          tabIndex={0}
+          role="button"
+        >
+          <UserCard name={name} avatar={profile?.avatar as string} />
+        </li>
+      ))}
     </ul>
   );
 };

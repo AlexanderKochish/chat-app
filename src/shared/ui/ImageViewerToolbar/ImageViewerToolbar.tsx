@@ -38,8 +38,8 @@ const ImageViewerToolbar = ({
         <button
           className={s.btn}
           onClick={() => {
-            if (roomImages && roomImages[imageIndex]?.url) {
-              handleDownloadImage(roomImages[imageIndex]?.url);
+            if (roomImages?.[imageIndex]?.url) {
+              handleDownloadImage(roomImages[imageIndex].url);
             }
           }}
         >

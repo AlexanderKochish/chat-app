@@ -9,7 +9,7 @@ type Props = {
 
 const PopoverCustom = ({ trigger, children }: Props) => {
   const [open, setOpen] = useState(false);
-  const closeTimeout = useRef<number | null>(null);
+  const closeTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const handleMouseEnter = () => {
     if (closeTimeout.current) {
@@ -28,12 +28,14 @@ const PopoverCustom = ({ trigger, children }: Props) => {
   return (
     <Popover.Root open={open} onOpenChange={setOpen}>
       <Popover.Trigger asChild>
-        <div
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={handleMouseLeave}
-          className={s.iconWrapper}
-        >
-          <button className={s.iconButton}>{trigger}</button>
+        <div className={s.iconWrapper}>
+          <button
+            className={s.iconButton}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+          >
+            {trigger}
+          </button>
         </div>
       </Popover.Trigger>
       <Popover.Portal>

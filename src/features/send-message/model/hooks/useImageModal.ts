@@ -8,9 +8,9 @@ export const useImageModal = (roomId: string) => {
   const [imageIndex, setImageIndex] = useState(0);
 
   const handleOpenModal = (id: string) => {
-    const index =
-      roomImages?.findIndex((img: { id: string }) => img.id === id) || 0;
-    setImageIndex(index);
+    const index = roomImages?.findIndex((img: { id: string }) => img.id === id);
+    const safeIndex = index !== undefined && index !== -1 ? index : 0;
+    setImageIndex(safeIndex);
     setImageId(id);
     setIsOpen(true);
   };
