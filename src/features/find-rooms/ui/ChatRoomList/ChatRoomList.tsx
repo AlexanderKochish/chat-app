@@ -36,7 +36,7 @@ const ChatRoomList = () => {
                   active={id === roomId}
                   name={user.user.name}
                   avatar={user.user.profile.avatar as string}
-                  lastMessage={String(messages[0].text)}
+                  lastMessage={messages[0]?.text}
                   key={user.userId}
                   isOnline={Boolean(data?.[user.userId])}
                 />
